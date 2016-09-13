@@ -26,6 +26,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import Encoder.TextureMovieEncoder;
 import util.FileManager;
+import util.TriangleHelper;
 
 /**
  * Created by abrain on 9/8/16.
@@ -48,8 +49,6 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private int mWidth, mHeight;
     private boolean updateTexture = false;
 
-    private Triangle mTriangle;
-
     /**
      * OpenGL params
      */
@@ -65,6 +64,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private boolean beginRecording =false;
     int camera_width;
     int camera_height;
+
+    //Overlay Stuff
+    private TriangleHelper th;
+
+    //Bitmap Overlay
+    
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -104,8 +109,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public synchronized void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //load and compile shader
         Log.d("Denny", "SurfaceCreated");
-        mTriangle = new Triangle(new float[]{(float)Math.random(),(float)Math.random(),(float)Math.random()},
-                new float[]{(float)Math.random(),(float)Math.random(),(float)Math.random()});
+        th = new TriangleHelper();
         try {
             mOffscreenShader.setProgram(R.raw.vertex_shader, R.raw.fragment_shader, mContext);
         } catch (Exception e) {
@@ -113,7 +117,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             e.printStackTrace();
         }
         GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
-
+        mVideoEncoder.setTriangle(th);
     }
 
     @SuppressLint("NewApi")
@@ -223,9 +227,9 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
         renderQuad(mOffscreenShader.getHandle("aPosition"));
 
-        mTriangle.draw();
+        th.drawTriangle();
         GLES20.glFlush();
-        mVideoEncoder.setTextureId(mTextureId);// randome number for now
+        mVideoEncoder.setTextureId(mTextureId);
         if(beginRecording==true){
             mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, camera_width, camera_height, 4607406, EGL14.eglGetCurrentContext()));
             beginRecording=false;

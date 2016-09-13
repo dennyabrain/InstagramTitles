@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import util.TriangleHelper;
+
 /**
  * Encode a movie from frames rendered from an external texture image.
  * <p>
@@ -79,6 +81,7 @@ public class TextureMovieEncoder implements Runnable {
     private boolean mReady;
     private boolean mRunning;
 
+    private TriangleHelper mTriangle;
 
     /**
      * Encoder configuration.
@@ -322,7 +325,9 @@ public class TextureMovieEncoder implements Runnable {
         mVideoEncoder.drainEncoder(false);
         mFullScreen.drawFrame(mTextureId, transform);
 
-        drawBox(mFrameNum++);
+        //drawBox(mFrameNum++);
+
+        mTriangle.drawTriangle();
 
         mInputWindowSurface.setPresentationTime(timestampNanos);
         mInputWindowSurface.swapBuffers();
@@ -412,5 +417,9 @@ public class TextureMovieEncoder implements Runnable {
         GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
+    }
+
+    public void setTriangle(TriangleHelper triangle){
+        mTriangle = triangle;
     }
 }
