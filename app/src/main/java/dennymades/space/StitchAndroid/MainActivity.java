@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
-
     }
 
     @Override

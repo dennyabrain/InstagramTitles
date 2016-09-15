@@ -59,7 +59,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
      */
     private ByteBuffer mFullQuadVertices;
     private float[] mTransformM = new float[16];
-    private float[] mOrientationM = new float[16];
+    public static float[] mOrientationM = new float[16];
     private float[] mRatio = new float[2];
 
     //Grafika Renderer stuff
@@ -74,11 +74,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private TriangleHelper th;
 
     //Bitmap Overlay
-    private BitmapData mBitmap;
-    private BitmapTextureShader mBitmapShader;
+    public static BitmapData mBitmap;
+    public static BitmapTextureShader mBitmapShader;
     private Bitmap emoji;
-    private BitmapOverlay bmpOverlay;
-    private int mBmpTextureId;
+    public static BitmapOverlay bmpOverlay;
+    public static int mBmpTextureId;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -214,6 +214,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
         //start camera-----------------------------------------
         mCamera.setParameters(param);
+        //TODO replace with better camera orientation detection method.
+        mCamera.setDisplayOrientation(90);
         mCamera.startPreview();
 
         //start render---------------------
@@ -265,7 +267,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
         mVideoEncoder.setTextureId(mTextureId);
         if(beginRecording==true){
-            mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, camera_width, camera_height, 4607406, EGL14.eglGetCurrentContext()));
+            mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, camera_height, camera_width, 4607406, EGL14.eglGetCurrentContext()));
             beginRecording=false;
         }
     }

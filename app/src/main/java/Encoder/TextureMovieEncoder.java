@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import dennymades.space.StitchAndroid.MyGLSurfaceView;
 import util.TriangleHelper;
 
 /**
@@ -327,7 +328,12 @@ public class TextureMovieEncoder implements Runnable {
 
         //drawBox(mFrameNum++);
 
-        mTriangle.drawTriangle();
+        //mTriangle.drawTriangle();
+        //MyGLSurfaceView.mBitmap.draw();
+        MyGLSurfaceView.mBitmapShader.useTheProgram();
+        MyGLSurfaceView.mBitmapShader.setUniforms(MyGLSurfaceView.mOrientationM, MyGLSurfaceView.mBmpTextureId);
+        MyGLSurfaceView.mBitmap.bindData(MyGLSurfaceView.mBitmapShader);
+        MyGLSurfaceView.mBitmap.draw();
 
         mInputWindowSurface.setPresentationTime(timestampNanos);
         mInputWindowSurface.swapBuffers();
