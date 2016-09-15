@@ -15,13 +15,13 @@ public class BitmapData {
     private final VertexArray mVertexArray;
 
     private static final float[] VERTEX_DATA={
-            -0.8f, -0.8f, 0.0f, 0.0f,
-            0.8f, 0.8f, 1.0f, -1.0f,
-            -0.8f, 0.8f, 0.0f, -1.0f,
+            -1f, -1f, 0.0f, 0.0f,
+            1f, 1f, 1.0f, -1.0f,
+            -1f, 1f, 0.0f, -1.0f,
 
-            -0.8f, -0.8f, 0.0f, 0.0f,
-            0.8f, -0.8f, 1.0f, 0.0f,
-            0.8f, 0.8f, 1.0f, -1.0f
+            -1f, -1f, 0.0f, 0.0f,
+            1.0f, -1f, 1.0f, 0.0f,
+            1f, 1f, 1.0f, -1.0f
     };
 
     public BitmapData(){
