@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.EGL14;
@@ -24,6 +26,9 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import BitmapOverlay.BitmapData;
+import BitmapOverlay.BitmapOverlay;
+import BitmapOverlay.BitmapTextureShader;
 import Encoder.TextureMovieEncoder;
 import util.FileManager;
 import util.TriangleHelper;
@@ -69,7 +74,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private TriangleHelper th;
 
     //Bitmap Overlay
-    
+    private BitmapData mBitmap;
+    private BitmapTextureShader mBitmapShader;
+    private Bitmap emoji;
+    private BitmapOverlay bmpOverlay;
+    private int mBmpTextureId;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -90,6 +99,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         mFullQuadVertices.put(FULL_QUAD_COORDS).position(0);
 
         setPreserveEGLContextOnPause(true);
+        setEGLConfigChooser(false);
         setEGLContextClientVersion(2);
         setRenderer(this);
         //setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -118,6 +128,24 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
         GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         mVideoEncoder.setTriangle(th);
+        mBitmap = new BitmapData();
+        try {
+            mBitmapShader = new BitmapTextureShader(mContext);
+        } catch (Exception e) {
+            Log.d(TAG, "exception creating bitmap texture : ", e);
+        }
+
+        emoji = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.emoji);
+        try {
+            //bmpOverlay = new BitmapOverlay(emoji);
+            bmpOverlay = new BitmapOverlay();
+            bmpOverlay.loadBitmap();
+            Bitmap temp = bmpOverlay.getBitmap();
+            bmpOverlay.setStuff(temp);
+            mBmpTextureId = bmpOverlay.getTextureId();
+        } catch (Exception e) {
+            Log.d(TAG, "exception binding bitmap to texture", e);
+        }
     }
 
     @SuppressLint("NewApi")
@@ -227,8 +255,14 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
         renderQuad(mOffscreenShader.getHandle("aPosition"));
 
-        th.drawTriangle();
+        //th.drawTriangle();
         GLES20.glFlush();
+
+        mBitmapShader.useTheProgram();
+        mBitmapShader.setUniforms(mOrientationM, mBmpTextureId);
+        mBitmap.bindData(mBitmapShader);
+        mBitmap.draw();
+
         mVideoEncoder.setTextureId(mTextureId);
         if(beginRecording==true){
             mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, camera_width, camera_height, 4607406, EGL14.eglGetCurrentContext()));

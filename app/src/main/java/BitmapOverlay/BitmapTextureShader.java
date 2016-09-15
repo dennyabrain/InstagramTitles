@@ -21,7 +21,7 @@ public class BitmapTextureShader extends Shader{
     private final int uTextureLocation;
     private final int aTextureCoordinatesLocation;
 
-    protected BitmapTextureShader(Context context) throws Exception {
+    public BitmapTextureShader(Context context) throws Exception {
         /*shader = new Shader();
         try {
             shader.setProgram(vertexShaderId, fragmentShaderId, context);
@@ -37,7 +37,7 @@ public class BitmapTextureShader extends Shader{
         aTextureCoordinatesLocation = getHandle("a_Texture_Coordinates");
     }
 
-    public void useProgram(){
+    public void useTheProgram(){
         useProgram();
     }
 

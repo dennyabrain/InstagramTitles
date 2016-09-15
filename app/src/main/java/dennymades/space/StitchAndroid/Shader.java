@@ -82,7 +82,7 @@ public class Shader {
             handle = GLES20.glGetUniformLocation(mProgram, name);
         }
         if(handle == -1){
-            Log.d("GLSL shader", "Could not get attrib location for " + name);
+            Log.d("GLSL shader", "Could not get location for " + name);
         }else{
             mShaderHandleMap.put(name, handle);
         }

@@ -1,5 +1,7 @@
 package BitmapOverlay;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import dennymades.space.StitchAndroid.Constants;
 import static android.opengl.GLES20.*;
 /**
@@ -14,12 +16,12 @@ public class BitmapData {
 
     private static final float[] VERTEX_DATA={
             -0.8f, -0.8f, 0.0f, 0.0f,
-            0.8f, 0.8f, 1.0f, 1.0f,
-            -0.8f, 0.8f, 0.0f, 1.0f,
+            0.8f, 0.8f, 1.0f, -1.0f,
+            -0.8f, 0.8f, 0.0f, -1.0f,
 
             -0.8f, -0.8f, 0.0f, 0.0f,
             0.8f, -0.8f, 1.0f, 0.0f,
-            0.8f, 0.8f, 1.0f, 1.0f
+            0.8f, 0.8f, 1.0f, -1.0f
     };
 
     public BitmapData(){
@@ -41,6 +43,11 @@ public class BitmapData {
     }
 
     public void draw(){
+        //added for transparency
+        // http://stackoverflow.com/a/2363177/2767642
+        glEnable(GL10.GL_BLEND);
+        glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 }
