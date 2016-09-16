@@ -13,6 +13,7 @@ android:layout_height="match_parent">
         android:text=""
         android:visibility="invisible"
         emojicon:emojiconSize="50sp"
+        android:textColor="@color/colorYellow"
         android:textSize="50dp"
         android:background="@android:color/transparent"
         android:layout_width="match_parent"
