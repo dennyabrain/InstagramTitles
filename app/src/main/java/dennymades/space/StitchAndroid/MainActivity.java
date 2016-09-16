@@ -1,13 +1,18 @@
 package dennymades.space.StitchAndroid;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 
+import io.github.rockerhieu.emojicon.EmojiconEditText;
 import util.Permission;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.RECORD_AUDIO};
 
     private MyGLSurfaceView mRenderer;
+    private EmojiconEditText mEmojiconEditText;
+    private Button btnText;
+
+    public static Bitmap mEmojiTextBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
+        mEmojiconEditText=(EmojiconEditText)findViewById(R.id.editEmojicon);
+        btnText = (Button) findViewById(R.id.btnText);
     }
 
     @Override
@@ -83,5 +94,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnRecord(View v){
         mRenderer.startRecording();
+    }
+
+    public void btnText(View v){
+        String label =btnText.getText().toString();
+        if(label.equals("TEXT")){
+            mEmojiconEditText.setVisibility(View.VISIBLE);
+            mEmojiconEditText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mEmojiconEditText, InputMethodManager.SHOW_IMPLICIT);
+            btnText.setText("DONE");
+        }
+        else if(label.equals("DONE")){
+            mEmojiconEditText.setCursorVisible(false);
+            mEmojiconEditText.buildDrawingCache();
+            mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
+            mRenderer.setBitmapShow(true);
+            btnText.setText("TEXT");
+            mEmojiconEditText.setVisibility(View.INVISIBLE);
+        }
     }
 }

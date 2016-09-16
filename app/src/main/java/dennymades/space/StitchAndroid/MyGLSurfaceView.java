@@ -79,6 +79,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private Bitmap emoji;
     public static BitmapOverlay bmpOverlay;
     public static int mBmpTextureId;
+    public boolean showBitmap=false;
+    public boolean initBitmapShow=false;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -135,7 +137,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             Log.d(TAG, "exception creating bitmap texture : ", e);
         }
 
-        emoji = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.emoji);
+        /*emoji = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.emoji);
+        if()
         try {
             //bmpOverlay = new BitmapOverlay(emoji);
             bmpOverlay = new BitmapOverlay();
@@ -145,7 +148,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             mBmpTextureId = bmpOverlay.getTextureId();
         } catch (Exception e) {
             Log.d(TAG, "exception binding bitmap to texture", e);
-        }
+        }*/
     }
 
     @SuppressLint("NewApi")
@@ -174,7 +177,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             mCamera = null;
         }
 
-        mCamera = Camera.open(1);
+        mCamera = Camera.open(0);
         try{
             mCamera.stopPreview();
             mCamera.setPreviewTexture(mSurfaceTexture);
@@ -260,10 +263,18 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //th.drawTriangle();
         GLES20.glFlush();
 
-        mBitmapShader.useTheProgram();
-        mBitmapShader.setUniforms(mOrientationM, mBmpTextureId);
-        mBitmap.bindData(mBitmapShader);
-        mBitmap.draw();
+        if(initBitmapShow==true){
+            setBitmap(MainActivity.mEmojiTextBitmap);
+            initBitmapShow=false;
+        }
+
+        if(showBitmap==true) {
+            mBitmapShader.useTheProgram();
+            mBitmapShader.setUniforms(mOrientationM, mBmpTextureId);
+            mBitmap.bindData(mBitmapShader);
+            mBitmap.draw();
+        }
+
 
         mVideoEncoder.setTextureId(mTextureId);
         if(beginRecording==true){
@@ -301,6 +312,23 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, 480, 640, 100000, EGL14.eglGetCurrentContext()));
         Log.d(TAG, "egl context : "+EGL14.eglGetCurrentContext().toString());
         beginRecording=true;
+    }
+
+    public void setBitmap(Bitmap bmp){
+        try {
+            bmpOverlay = new BitmapOverlay(bmp, camera_width, camera_height);
+            //bmpOverlay.loadBitmap();
+            //Bitmap temp = bmpOverlay.getBitmap();
+            //bmpOverlay.setStuff(temp);
+            mBmpTextureId = bmpOverlay.getTextureId();
+        } catch (Exception e) {
+            Log.d(TAG, "exception setting Bitmap", e);
+        }
+        showBitmap=true;
+    }
+
+    public void setBitmapShow(boolean flag){
+        initBitmapShow=flag;
     }
 
 }

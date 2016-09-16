@@ -2,9 +2,14 @@ package BitmapOverlay;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 import android.os.Environment;
+import android.util.Size;
 
 import java.io.File;
 
@@ -18,12 +23,18 @@ public class BitmapOverlay {
     Bitmap mBitmap;
     protected int textureId;
     protected String fileName;
+    private int mWidth;
+    private int mHeight;
 
     public BitmapOverlay(){
 
     }
 
-    public BitmapOverlay(Bitmap bmp) throws Exception{
+    public BitmapOverlay(Bitmap bmp, int width, int height) throws Exception{
+        mWidth = width;
+        mHeight = height;
+        Bitmap snugFit = overlayBitmap(bmp);
+
         int[] textures = new int[1];
         glGenTextures(1, textures, 0);
         if(textures[0]==0){
@@ -36,7 +47,7 @@ public class BitmapOverlay {
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-        GLUtils.texImage2D(GL_TEXTURE_2D, 0, bmp, 0);
+        GLUtils.texImage2D(GL_TEXTURE_2D, 0, snugFit, 0);
 
         textureId=textures[0];
     }
@@ -85,5 +96,19 @@ public class BitmapOverlay {
         GLUtils.texImage2D(GL_TEXTURE_2D, 0, bmp, 0);
 
         textureId=textures[0];
+    }
+
+    private Bitmap overlayBitmap(Bitmap bmp){
+        Bitmap biggerBitmap = Bitmap.createBitmap(mHeight, mWidth, bmp.getConfig());
+        Canvas cnvs = new Canvas(biggerBitmap);
+        cnvs.drawBitmap(biggerBitmap, new android.graphics.Matrix(), null);
+
+        Point midPointLarge = new Point(biggerBitmap.getWidth()/2, biggerBitmap.getHeight()/2);
+        Point offsetSmall = new Point(bmp.getWidth()/2, bmp.getHeight()/2);
+        Point topLeft = new Point(midPointLarge.x-offsetSmall.x, midPointLarge.y-offsetSmall.y);
+
+        //cnvs.drawBitmap(bmp, new android.graphics.Matrix(), null);
+        cnvs.drawBitmap(bmp, topLeft.x, topLeft.y, new Paint());
+        return biggerBitmap;
     }
 }
