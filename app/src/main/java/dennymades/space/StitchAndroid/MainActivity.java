@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import EmojiTextView.MyEmojiTextView;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
+import io.github.rockerhieu.emojicon.EmojiconTextView;
 import util.Permission;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MyGLSurfaceView mRenderer;
     private EmojiconEditText mEmojiconEditText;
+    //private EmojiconTextView mEmojiconTextView;
+    private MyEmojiTextView myEmojiTextView;
     private Button btnText;
 
     public static Bitmap mEmojiTextBitmap;
@@ -43,7 +48,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
         mEmojiconEditText=(EmojiconEditText)findViewById(R.id.editEmojicon);
+        //mEmojiconTextView=(EmojiconTextView) findViewById(R.id.emojiconTextView);
+        myEmojiTextView = new MyEmojiTextView(this);
+        myEmojiTextView.setResourceById((EmojiconTextView) findViewById(R.id.emojiconTextView));
+        myEmojiTextView.setTouchEvents();
         btnText = (Button) findViewById(R.id.btnText);
+        myEmojiTextView.loadTypefaces();
     }
 
     @Override
@@ -99,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     public void btnText(View v){
         String label =btnText.getText().toString();
         if(label.equals("TEXT")){
+            myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
             mEmojiconEditText.setVisibility(View.VISIBLE);
             mEmojiconEditText.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -106,12 +117,16 @@ public class MainActivity extends AppCompatActivity {
             btnText.setText("DONE");
         }
         else if(label.equals("DONE")){
-            mEmojiconEditText.setCursorVisible(false);
+            /*mEmojiconEditText.setCursorVisible(false);
             mEmojiconEditText.buildDrawingCache();
             mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
             mRenderer.setBitmapShow(true);
             btnText.setText("TEXT");
+            mEmojiconEditText.setVisibility(View.INVISIBLE);*/
             mEmojiconEditText.setVisibility(View.INVISIBLE);
+            myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
+            myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
+            btnText.setText("TEXT");
         }
     }
 }

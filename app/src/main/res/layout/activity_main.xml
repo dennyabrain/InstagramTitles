@@ -21,6 +21,18 @@ android:layout_height="match_parent">
         android:layout_gravity="center"
         />
 
+    <io.github.rockerhieu.emojicon.EmojiconTextView
+        android:id="@+id/emojiconTextView"
+        android:text=""
+        android:textColor="@color/colorYellow"
+        emojicon:emojiconSize="50sp"
+        android:textSize="50dp"
+        emojicon:emojiconAlignment="baseline"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

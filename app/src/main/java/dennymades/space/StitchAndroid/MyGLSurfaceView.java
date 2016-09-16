@@ -177,7 +177,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             mCamera = null;
         }
 
-        mCamera = Camera.open(0);
+        mCamera = Camera.open(1);
         try{
             mCamera.stopPreview();
             mCamera.setPreviewTexture(mSurfaceTexture);
