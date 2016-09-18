@@ -28,6 +28,7 @@ android:layout_height="match_parent">
         android:textColor="@color/colorYellow"
         emojicon:emojiconSize="50sp"
         android:textSize="50dp"
+        android:lineSpacingMultiplier="0.8"
         emojicon:emojiconAlignment="baseline"
         android:textAlignment="center"
         android:layout_gravity="center"

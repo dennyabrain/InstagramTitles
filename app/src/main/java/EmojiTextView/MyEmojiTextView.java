@@ -64,9 +64,9 @@ public class MyEmojiTextView{
 
     public void loadTypefaces(){
         //Load all fonts
-        typfaces = new Typeface[6];
+        typfaces = new Typeface[7];
         typfaces[0]=Typeface.DEFAULT;
-        for(int i=1;i<6;i++){
+        for(int i=1;i<7;i++){
             typfaces[i]=Typeface.createFromAsset(mActivity.getAssets(),"fonts/"+i+".ttf");
         }
     }
@@ -80,7 +80,7 @@ public class MyEmojiTextView{
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.d(TAG, "on Single Tap Up");
-            currentTypfaceIndex=(currentTypfaceIndex+1)%6;
+            currentTypfaceIndex=(currentTypfaceIndex+1)%7;
             setType(currentTypfaceIndex);
             return super.onSingleTapUp(e);
         }

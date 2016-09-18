@@ -69,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mRenderer.stopRecording();
-        mRenderer.onDestroy();
+        super.onStop();
+        //mRenderer.stopRecording();
+        //mRenderer.onDestroy();
     }
 
     @Override
@@ -117,16 +118,15 @@ public class MainActivity extends AppCompatActivity {
             btnText.setText("DONE");
         }
         else if(label.equals("DONE")){
-            /*mEmojiconEditText.setCursorVisible(false);
+            mEmojiconEditText.setCursorVisible(false);
             mEmojiconEditText.buildDrawingCache();
             mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
             mRenderer.setBitmapShow(true);
             btnText.setText("TEXT");
-            mEmojiconEditText.setVisibility(View.INVISIBLE);*/
             mEmojiconEditText.setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
             myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
-            btnText.setText("TEXT");
+            //btnText.setText("TEXT");
         }
     }
 }
