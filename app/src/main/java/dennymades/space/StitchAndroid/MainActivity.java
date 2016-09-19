@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +16,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import EmojiTextView.MyEmojiTextView;
+import EmojiTextView.TextControlFragment;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 import util.Permission;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TextControlFragment.onTextFragmentButtonClickedListener {
     private static String TAG = "Main Activity : ";
     private String[] permissions = {Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -118,15 +121,20 @@ public class MainActivity extends AppCompatActivity {
             btnText.setText("DONE");
         }
         else if(label.equals("DONE")){
-            mEmojiconEditText.setCursorVisible(false);
+            /*mEmojiconEditText.setCursorVisible(false);
             mEmojiconEditText.buildDrawingCache();
             mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
             mRenderer.setBitmapShow(true);
-            btnText.setText("TEXT");
+            btnText.setText("TEXT");*/
             mEmojiconEditText.setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
             myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
-            //btnText.setText("TEXT");
+            btnText.setText("TEXT");
         }
+    }
+
+    @Override
+    public void onTextPropertyClicked(String label) {
+        myEmojiTextView.setColor(label);
     }
 }

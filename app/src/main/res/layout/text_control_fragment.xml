@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragmentRootView">
+    <!--
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Bold"
+                android:layout_weight="1"
+                android:id="@+id/button3" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Underline"
+                android:layout_weight="1"
+                android:id="@+id/button4"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Italic"
+                android:layout_weight="1"
+                android:id="@+id/button5"
+                android:layout_gravity="right" />
+
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Left"
+                android:layout_weight="1"
+                android:id="@+id/button6" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Center"
+                android:id="@+id/button7"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Right"
+                android:layout_weight="1"
+                android:id="@+id/button8"
+                android:layout_gravity="right" />
+
+        </LinearLayout>
+    -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#8C2155"
+            android:layout_weight="1"
+            android:tag="V"
+            android:id="@+id/button9" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#0B3948"
+            android:layout_weight="1"
+            android:tag="I"
+            android:id="@+id/button10" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#63ADF2"
+            android:layout_weight="1"
+            android:tag="B"
+            android:id="@+id/button11" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#A2FAA3"
+            android:layout_weight="1"
+            android:tag="G"
+            android:id="@+id/button12" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#FEFFA5"
+            android:layout_weight="1"
+            android:tag="Y"
+            android:id="@+id/button13" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#D14127"
+            android:layout_weight="1"
+            android:tag="O"
+            android:id="@+id/button14" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#FF2B2B"
+            android:layout_weight="1"
+            android:tag="R"
+            android:id="@+id/button15" />
+
+    </LinearLayout>
+
+</LinearLayout>

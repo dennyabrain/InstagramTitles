@@ -3,13 +3,19 @@ package EmojiTextView;
 import android.app.Activity;
 import android.content.Context;
 import android.gesture.Gesture;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import dennymades.space.StitchAndroid.MainActivity;
+import dennymades.space.StitchAndroid.R;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 
@@ -23,11 +29,17 @@ public class MyEmojiTextView{
     private int currentTypfaceIndex=0;
     private Typeface[] typfaces;
 
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private TextControlFragment textControlFragment;
     private GestureDetector mDetector;
+    private boolean overlayUIVisible;
 
     public MyEmojiTextView(Activity activity){
         mActivity=activity;
         mDetector = new GestureDetector(activity, new myGestureDetector());
+        fragmentManager =activity.getFragmentManager();
+        overlayUIVisible = false;
     }
 
     public void setResourceById(EmojiconTextView id){
@@ -43,21 +55,33 @@ public class MyEmojiTextView{
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 boolean result = mDetector.onTouchEvent(motionEvent);
-                /*if(!result){
-                    Log.d(TAG, "gesture detector returned false");
-                }*/
-                /*if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
-                    return true;
-                }
-                if(motionEvent.getAction()==MotionEvent.ACTION_UP){
-                    Log.d(TAG, "DOWN");
-                    currentTypfaceIndex=(currentTypfaceIndex+1)%6;
-                    //mEmojiconTextView.setTypeface(typefaces[currentTypfaceIndex]);
-                    setType(currentTypfaceIndex);
-                }*/
                 return true;
             }
         });
+    }
+
+    public void setColor(String s){
+        if(s.equals("V")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#8C2155"));
+        }
+        if(s.equals("I")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#0B3948"));
+        }
+        if(s.equals("B")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#63ADF2"));
+        }
+        if(s.equals("G")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#A2FAA3"));
+        }
+        if(s.equals("Y")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#FEFFA5"));
+        }
+        if(s.equals("O")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#D14127"));
+        }
+        if(s.equals("R")){
+            mEmojiconTextView.setTextColor(Color.parseColor("#FF2B2B"));
+        }
     }
 
 
@@ -75,8 +99,32 @@ public class MyEmojiTextView{
         mEmojiconTextView.setTypeface(typfaces[index]);
     }
 
+    public void toggleOverlayUI(){
+        if(overlayUIVisible==false){
+            fragmentTransaction = fragmentManager.beginTransaction();
+            textControlFragment = new TextControlFragment();
+            fragmentTransaction.add(R.id.fragmentViewGroup, textControlFragment);
+            fragmentTransaction.commit();
+            overlayUIVisible=true;
+        }else{
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(textControlFragment);
+            fragmentTransaction.commit();
+            overlayUIVisible=false;
+        }
+
+    }
+
 
     public class myGestureDetector extends GestureDetector.SimpleOnGestureListener{
+
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            toggleOverlayUI();
+            Log.d(TAG, "Long Press");
+        }
+
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.d(TAG, "on Single Tap Up");
