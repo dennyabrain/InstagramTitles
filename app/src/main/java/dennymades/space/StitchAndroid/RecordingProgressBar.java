@@ -49,6 +49,7 @@ public class RecordingProgressBar {
                 animAlphaDn.start();
                 isProgressBarVisible=false;
                 Log.d("Denny", "countdown Over");
+
             }
         };
     }
