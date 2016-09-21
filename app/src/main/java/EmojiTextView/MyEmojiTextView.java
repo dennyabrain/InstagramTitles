@@ -102,13 +102,16 @@ public class MyEmojiTextView{
     public void toggleOverlayUI(){
         if(overlayUIVisible==false){
             fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.animator.fadein,R.animator.fadeout);
             textControlFragment = new TextControlFragment();
             fragmentTransaction.add(R.id.fragmentViewGroup, textControlFragment);
             fragmentTransaction.commit();
             overlayUIVisible=true;
         }else{
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(textControlFragment);
+            fragmentTransaction.setCustomAnimations(R.animator.fadein,R.animator.fadeout);
+            fragmentTransaction.hide(textControlFragment);
+            //fragmentTransaction.remove(textControlFragment);
             fragmentTransaction.commit();
             overlayUIVisible=false;
         }

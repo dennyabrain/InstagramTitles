@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView.setTouchEvents();
         btnText = (Button) findViewById(R.id.btnText);
         myEmojiTextView.loadTypefaces();
+        myEmojiTextView.getTextView().setText("Testing \n In \n New York");
+        myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
     }
 
     @Override
