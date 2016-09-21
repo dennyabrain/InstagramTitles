@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
     public static Bitmap mEmojiTextBitmap;
 
+    //FAB Logic
+    boolean isFabOpen=false;
+    private RecordingProgressBar mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView.loadTypefaces();
         myEmojiTextView.getTextView().setText("Testing \n In \n New York");
         myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
+
+        mProgressBar = new RecordingProgressBar(this);
     }
 
     @Override
@@ -138,5 +144,17 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     @Override
     public void onTextPropertyClicked(String label) {
         myEmojiTextView.setColor(label);
+    }
+
+    //FAB CLICK
+    public void fabRecordClick(View v){
+        Log.d("Denny", "fab clicked");
+        if(mProgressBar.getVisibilityStatus()){
+            mProgressBar.hideProgressBar();
+            Log.d("Denny", "hide pbar");
+        }else{
+            mProgressBar.showProgressBar();
+            Log.d("Denny", "show pbar");
+        }
     }
 }

@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <dennymades.space.StitchAndroid.MyGLSurfaceView
@@ -67,5 +68,28 @@
         android:onClick="btnText"
         android:id="@+id/btnText"
         android:layout_gravity="right|top" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabRecord"
+        android:layout_height="56dp"
+        android:layout_width="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="20dp"
+        android:onClick="fabRecordClick"
+        android:layout_marginBottom="80dp"
+        app:borderWidth="0dp"
+        emojicon:elevation="10dp" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="23dp"
+        android:layout_marginBottom="108dp"
+        android:max="100"
+        android:progress="0"
+        android:elevation="9dp" />
 
 </FrameLayout>
