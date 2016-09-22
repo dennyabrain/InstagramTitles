@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         if(stitchMediator.getProgressBarVisibility()){
             //hideProgressBar();
         }else{
+            myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().buildDrawingCache();
             mEmojiTextBitmap = Bitmap.createBitmap(myEmojiTextView.getTextView().getDrawingCache());
             stitchMediator.setBitmapShow(true);
