@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ProgressBar;
 
+import Mediator.StitchMediator;
+
 /**
  * Created by abrain on 9/21/16.
  */
 public class RecordingProgressBar {
+    private StitchMediator mMediator;
     private String TAG = this.getClass().getName();
     private ProgressBar mProgressBar;
     private ObjectAnimator animAlphaUp;
@@ -21,7 +24,8 @@ public class RecordingProgressBar {
     private boolean isProgressBarVisible=false;
     private CountDownTimer mCountDownTimer;
 
-    public RecordingProgressBar(Activity activity){
+    public RecordingProgressBar(Activity activity, StitchMediator m){
+        mMediator = m;
         mProgressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
 
         animAlphaUp = ObjectAnimator.ofFloat(mProgressBar, "alpha", 0.5f, 1f);
@@ -35,37 +39,20 @@ public class RecordingProgressBar {
         animTranslateYDn = ObjectAnimator.ofFloat(mProgressBar, "translationY", -150,0);
         animTranslateYDn.setDuration(300);
         animTranslateYDn.setInterpolator(new OvershootInterpolator());
-
-        mCountDownTimer = new CountDownTimer(10000,100) {
-            @Override
-            public void onTick(long l) {
-                mProgressBar.setProgress(100-(int)(l/100));
-            }
-
-            @Override
-            public void onFinish() {
-                mProgressBar.setProgress(100);
-                animTranslateYDn.start();
-                animAlphaDn.start();
-                isProgressBarVisible=false;
-                Log.d("Denny", "countdown Over");
-
-            }
-        };
     }
 
     public void hideProgressBar(){
         animTranslateYDn.start();
         animAlphaDn.start();
         isProgressBarVisible=false;
-        mCountDownTimer.cancel();
+        mMediator.cancelTimer();
     }
 
     public void showProgressBar(){
         animAlphaUp.start();
         animTranslateYUp.start();
         isProgressBarVisible=true;
-        mCountDownTimer.start();
+        mMediator.startTimer();
     }
 
     public boolean getVisibilityStatus(){
@@ -76,5 +63,7 @@ public class RecordingProgressBar {
         }
     }
 
-
+    public void setProgress(int a){
+        mProgressBar.setProgress(a);
+    }
 }

@@ -8,6 +8,8 @@ public interface StitchMediatorInterface {
 
     public void startTimer();
 
+    public void cancelTimer();
+
     public void startEncoding();
 
     public void stopEncoding();
@@ -17,4 +19,6 @@ public interface StitchMediatorInterface {
     public void showProgressBar();
 
     public void hideProgressBar();
+
+    public void setProgress(long duration);
 }
