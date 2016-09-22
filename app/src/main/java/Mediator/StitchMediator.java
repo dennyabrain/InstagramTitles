@@ -65,6 +65,11 @@ public class StitchMediator implements StitchMediatorInterface {
     }
 
     @Override
+    public void setBitmapShow(boolean b) {
+        mRenderer.setBitmapShow(b);
+    }
+
+    @Override
     public boolean getProgressBarVisibility() {
         return mRecordingProgressBar.getVisibilityStatus();
     }

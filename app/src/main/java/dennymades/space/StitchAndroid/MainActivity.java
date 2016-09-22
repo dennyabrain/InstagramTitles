@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView.setTouchEvents();
         btnText = (Button) findViewById(R.id.btnText);
         myEmojiTextView.loadTypefaces();
-        myEmojiTextView.getTextView().setText("Testing \n In \n New York");
-        myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
+        //myEmojiTextView.getTextView().setText("Testing \n In \n New York");
+        //myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
 
         //mProgressBar = new RecordingProgressBar(this);
         stitchMediator = new StitchMediator(this, this);
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     public void btnText(View v){
         String label=btnText.getText().toString();
         if(label.equals("TEXT")){
-            myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
+            //myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
             mEmojiconEditText.setVisibility(View.VISIBLE);
             mEmojiconEditText.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -132,15 +132,16 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             btnText.setText("DONE");
         }
         else if(label.equals("DONE")){
-            /*mEmojiconEditText.setCursorVisible(false);
-            mEmojiconEditText.buildDrawingCache();
-            mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
-            mRenderer.setBitmapShow(true);
-            btnText.setText("TEXT");*/
+            mEmojiconEditText.setCursorVisible(false);
+            //mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
+            btnText.setText("TEXT");
             mEmojiconEditText.setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
             myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
-            btnText.setText("TEXT");
+            /*mEmojiconEditText.setVisibility(View.INVISIBLE);
+            myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
+            myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
+            btnText.setText("TEXT");*/
         }
     }
 
@@ -151,6 +152,13 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
     //FAB CLICK
     public void fabRecordClick(View v){
+        if(stitchMediator.getProgressBarVisibility()){
+            //hideProgressBar();
+        }else{
+            myEmojiTextView.getTextView().buildDrawingCache();
+            mEmojiTextBitmap = Bitmap.createBitmap(myEmojiTextView.getTextView().getDrawingCache());
+            stitchMediator.setBitmapShow(true);
+        }
         stitchMediator.onFabRecordClicked();
     }
 }
