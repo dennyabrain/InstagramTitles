@@ -17,6 +17,7 @@ import android.widget.Button;
 
 import EmojiTextView.MyEmojiTextView;
 import EmojiTextView.TextControlFragment;
+import Mediator.StitchMediator;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 import util.Permission;
@@ -36,8 +37,11 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     public static Bitmap mEmojiTextBitmap;
 
     //FAB Logic
-    boolean isFabOpen=false;
-    private RecordingProgressBar mProgressBar;
+    //boolean isFabOpen=false;
+    //private RecordingProgressBar mProgressBar;
+
+    //Mediator
+    private StitchMediator stitchMediator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView.getTextView().setText("Testing \n In \n New York");
         myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
 
-        mProgressBar = new RecordingProgressBar(this);
+        //mProgressBar = new RecordingProgressBar(this);
+        stitchMediator = new StitchMediator(this, this);
     }
 
     @Override
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     }
 
     public void btnText(View v){
-        String label =btnText.getText().toString();
+        String label=btnText.getText().toString();
         if(label.equals("TEXT")){
             myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
             mEmojiconEditText.setVisibility(View.VISIBLE);
@@ -148,13 +153,6 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
     //FAB CLICK
     public void fabRecordClick(View v){
-        Log.d("Denny", "fab clicked");
-        if(mProgressBar.getVisibilityStatus()){
-            mProgressBar.hideProgressBar();
-            Log.d("Denny", "hide pbar");
-        }else{
-            mProgressBar.showProgressBar();
-            Log.d("Denny", "show pbar");
-        }
+        stitchMediator.onFabRecordClicked();
     }
 }
