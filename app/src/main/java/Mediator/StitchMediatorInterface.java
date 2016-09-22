@@ -14,6 +14,8 @@ public interface StitchMediatorInterface {
 
     public void stopEncoding();
 
+    public void resumeEncoding();
+
     public boolean getProgressBarVisibility();
 
     public void showProgressBar();

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import dennymades.space.StitchAndroid.MyGLSurfaceView;
+import dennymades.space.StitchAndroid.R;
 import dennymades.space.StitchAndroid.RecordingProgressBar;
 import dennymades.space.StitchAndroid.VideoCountDown;
 
@@ -15,12 +17,15 @@ public class StitchMediator implements StitchMediatorInterface {
     private Activity mActivity;
     private RecordingProgressBar mRecordingProgressBar;
     private VideoCountDown mVideoCountDown;
+    private MyGLSurfaceView mRenderer;
 
     public StitchMediator(Context context, Activity activity){
         mContext = context;
         mActivity = activity;
         mRecordingProgressBar = new RecordingProgressBar(mActivity, this);
         mVideoCountDown = new VideoCountDown(this);
+
+        mRenderer = (MyGLSurfaceView)activity.findViewById(R.id.renderer_view);
     }
 
     @Override
@@ -35,21 +40,28 @@ public class StitchMediator implements StitchMediatorInterface {
     @Override
     public void startTimer() {
         mVideoCountDown.start();
+        mRenderer.startRecording();
     }
 
     @Override
     public void cancelTimer() {
         mVideoCountDown.cancel();
+        mRenderer.stopRecording();
     }
 
     @Override
     public void startEncoding() {
-
+        mRenderer.startRecording();
     }
 
     @Override
     public void stopEncoding() {
+        mRenderer.stopRecording();
+    }
 
+    @Override
+    public void resumeEncoding() {
+        mRenderer.onResume();
     }
 
     @Override

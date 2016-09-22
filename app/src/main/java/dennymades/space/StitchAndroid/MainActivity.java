@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO};
 
-    private MyGLSurfaceView mRenderer;
+    //private MyGLSurfaceView mRenderer;
     private EmojiconEditText mEmojiconEditText;
     //private EmojiconTextView mEmojiconTextView;
     private MyEmojiTextView myEmojiTextView;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         }
 
         setContentView(R.layout.activity_main);
-        mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
+        //mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
         mEmojiconEditText=(EmojiconEditText)findViewById(R.id.editEmojicon);
         //mEmojiconTextView=(EmojiconTextView) findViewById(R.id.emojiconTextView);
         myEmojiTextView = new MyEmojiTextView(this);
@@ -86,14 +86,12 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     protected void onPause() {
         super.onPause();
         super.onStop();
-        //mRenderer.stopRecording();
-        //mRenderer.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mRenderer.onResume();
+        stitchMediator.resumeEncoding();
     }
 
 
@@ -116,11 +114,11 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     }
 
     public void btnStop(View v){
-        mRenderer.stopRecording();
+        //mRenderer.stopRecording();
     }
 
     public void btnRecord(View v){
-        mRenderer.startRecording();
+        //mRenderer.startRecording();
     }
 
     public void btnText(View v){
