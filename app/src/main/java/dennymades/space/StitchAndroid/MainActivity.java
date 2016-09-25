@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView = new MyEmojiTextView(this);
         myEmojiTextView.setResourceById((EmojiconTextView) findViewById(R.id.emojiconTextView));
         myEmojiTextView.setTouchEvents();
+        myEmojiTextView.setDragEvents();
         btnText = (Button) findViewById(R.id.btnText);
         myEmojiTextView.loadTypefaces();
         //myEmojiTextView.getTextView().setText("Testing \n In \n New York");
@@ -111,14 +112,6 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
                 }
                 break;
         }
-    }
-
-    public void btnStop(View v){
-        //mRenderer.stopRecording();
-    }
-
-    public void btnRecord(View v){
-        //mRenderer.startRecording();
     }
 
     public void btnText(View v){

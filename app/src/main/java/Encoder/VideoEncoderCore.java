@@ -16,10 +16,12 @@
 
 package Encoder;
 
+import android.media.CamcorderProfile;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
+import android.media.MediaRecorder;
 import android.util.Log;
 import android.view.Surface;
 
@@ -160,6 +162,8 @@ public class VideoEncoderCore {
 
                 // now that we have the Magic Goodies, start the muxer
                 mTrackIndex = mMuxer.addTrack(newFormat);
+                //Added by Denny
+
                 mMuxer.start();
                 mMuxerStarted = true;
             } else if (encoderStatus < 0) {

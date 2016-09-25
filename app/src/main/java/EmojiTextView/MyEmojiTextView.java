@@ -10,6 +10,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +23,7 @@ import io.github.rockerhieu.emojicon.EmojiconTextView;
 /**
  * Created by abrain on 9/15/16.
  */
-public class MyEmojiTextView{
+public class MyEmojiTextView implements View.OnDragListener{
     private String TAG="MyEmojiTextView";
     private EmojiconTextView mEmojiconTextView;
     private Activity mActivity;
@@ -58,6 +59,10 @@ public class MyEmojiTextView{
                 return true;
             }
         });
+    }
+
+    public void setDragEvents(){
+        mEmojiconTextView.setOnDragListener(this);
     }
 
     public void setColor(String s){
@@ -136,7 +141,7 @@ public class MyEmojiTextView{
             return super.onSingleTapUp(e);
         }
 
-        @Override
+        /*@Override
         public boolean onDown(MotionEvent e) {
             //return super.onDown(e);
             Log.d(TAG, "on Down");
@@ -145,6 +150,7 @@ public class MyEmojiTextView{
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return true;
             Log.d(TAG, "on Fling" + velocityX);
             if(velocityX<0){
                 mEmojiconTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
@@ -154,6 +160,14 @@ public class MyEmojiTextView{
             mEmojiconTextView.setText(mEmojiconTextView.getText());
             //return super.onFling(e1, e2, velocityX, velocityY);
             return true;
-        }
+        }*/
+    }
+
+    //DRAG AND DROP LISTENERS
+
+    @Override
+    public boolean onDrag(View view, DragEvent dragEvent) {
+        Log.d(TAG, "in drag");
+        return true;
     }
 }

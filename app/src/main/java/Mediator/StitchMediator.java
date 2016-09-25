@@ -2,8 +2,10 @@ package Mediator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.provider.DocumentsContract;
 import android.util.Log;
 
+import GUI.RootLayout;
 import dennymades.space.StitchAndroid.MyGLSurfaceView;
 import dennymades.space.StitchAndroid.R;
 import dennymades.space.StitchAndroid.RecordingProgressBar;
@@ -18,6 +20,7 @@ public class StitchMediator implements StitchMediatorInterface {
     private RecordingProgressBar mRecordingProgressBar;
     private VideoCountDown mVideoCountDown;
     private MyGLSurfaceView mRenderer;
+    private RootLayout rootLayout;
 
     public StitchMediator(Context context, Activity activity){
         mContext = context;
@@ -26,6 +29,13 @@ public class StitchMediator implements StitchMediatorInterface {
         mVideoCountDown = new VideoCountDown(this);
 
         mRenderer = (MyGLSurfaceView)activity.findViewById(R.id.renderer_view);
+
+        rootLayout = new RootLayout(R.id.rootLayout, this);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return mActivity;
     }
 
     @Override

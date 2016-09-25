@@ -3,10 +3,14 @@
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/rootLayout"
+    android:clipChildren="false"
+    emojicon:elevation="12dp" >
     <dennymades.space.StitchAndroid.MyGLSurfaceView
         android:id="@+id/renderer_view"
         android:layout_width="match_parent"
+        android:clipChildren="false"
         android:layout_height="match_parent"/>
 
     <io.github.rockerhieu.emojicon.EmojiconEditText
@@ -36,13 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:id="@+id/button"
-        android:onClick="btnStop"
-        android:layout_gravity="right|bottom" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,15 +47,9 @@
         android:id="@+id/fragmentViewGroup"
         android:orientation="vertical"
         android:layout_gravity="bottom"
+        android:clipChildren="false"
         />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="record"
-        android:id="@+id/button2"
-        android:onClick="btnRecord"
-        android:layout_gravity="left|bottom" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
