@@ -6,8 +6,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     private Button btnText;
 
     public static Bitmap mEmojiTextBitmap;
+    FloatingActionButton fab;
 
     //FAB Logic
     //boolean isFabOpen=false;
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView.setDragEvents();
         btnText = (Button) findViewById(R.id.btnText);
         myEmojiTextView.loadTypefaces();
+        fab = (FloatingActionButton)findViewById(R.id.fabRecord);
         //myEmojiTextView.getTextView().setText("Testing \n In \n New York");
         //myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
 
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
     public void btnText(View v){
         String label=btnText.getText().toString();
+
         if(label.equals("TEXT")){
             //myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
             mEmojiconEditText.setVisibility(View.VISIBLE);
@@ -147,7 +152,9 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     public void fabRecordClick(View v){
         if(stitchMediator.getProgressBarVisibility()){
             //hideProgressBar();
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_record));
         }else{
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_pause_black_24dp));
             myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().buildDrawingCache();
             mEmojiTextBitmap = Bitmap.createBitmap(myEmojiTextView.getTextView().getDrawingCache());

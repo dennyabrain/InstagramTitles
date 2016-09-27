@@ -141,7 +141,7 @@ public class MyEmojiTextView implements View.OnDragListener{
             return super.onSingleTapUp(e);
         }
 
-        /*@Override
+        @Override
         public boolean onDown(MotionEvent e) {
             //return super.onDown(e);
             Log.d(TAG, "on Down");
@@ -150,8 +150,7 @@ public class MyEmojiTextView implements View.OnDragListener{
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return true;
-            Log.d(TAG, "on Fling" + velocityX);
+
             if(velocityX<0){
                 mEmojiconTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             }else{
@@ -160,7 +159,7 @@ public class MyEmojiTextView implements View.OnDragListener{
             mEmojiconTextView.setText(mEmojiconTextView.getText());
             //return super.onFling(e1, e2, velocityX, velocityY);
             return true;
-        }*/
+        }
     }
 
     //DRAG AND DROP LISTENERS

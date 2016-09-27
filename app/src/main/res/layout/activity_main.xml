@@ -51,19 +51,12 @@
         />
 
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEXT"
-        android:onClick="btnText"
-        android:id="@+id/btnText"
-        android:layout_gravity="right|top" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabRecord"
         android:layout_height="56dp"
         android:layout_width="56dp"
+        android:src="@drawable/ic_record"
+
         android:layout_gravity="bottom|end"
         android:layout_marginRight="20dp"
         android:onClick="fabRecordClick"
@@ -82,5 +75,18 @@
         android:max="100"
         android:progress="0"
         android:elevation="9dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TEXT"
+        android:layout_marginRight="23dp"
+        android:textColor="@color/transparentAccent"
+        android:background="@android:color/transparent"
+        android:textSize="20dp"
+        android:onClick="btnText"
+        android:id="@+id/btnText"
+        android:layout_gravity="right|top" />
 
 </FrameLayout>
