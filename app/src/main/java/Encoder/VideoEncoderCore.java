@@ -22,12 +22,16 @@ import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.MediaRecorder;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+
+import util.Messages;
 
 /**
  * This class wraps up the core components used for surface-input video encoding.
@@ -59,9 +63,11 @@ public class VideoEncoderCore {
     /**
      * Configures encoder and muxer state, and prepares the input Surface.
      */
-    public VideoEncoderCore(int width, int height, int bitRate, File outputFile)
+    public VideoEncoderCore(int width, int height, int bitRate, File outputFile, MediaMuxer mxr)
             throws IOException {
         mBufferInfo = new MediaCodec.BufferInfo();
+
+        mMuxer = mxr;
 
         MediaFormat format = MediaFormat.createVideoFormat(MIME_TYPE, width, height);
 
@@ -87,8 +93,8 @@ public class VideoEncoderCore {
         //
         // We're not actually interested in multiplexing audio.  We just want to convert
         // the raw H.264 elementary stream we get from MediaCodec into a .mp4 file.
-        mMuxer = new MediaMuxer(outputFile.toString(),
-                MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+        /*mMuxer = new MediaMuxer(outputFile.toString(),
+                MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);*/
 
         mTrackIndex = -1;
         mMuxerStarted = false;
@@ -213,4 +219,5 @@ public class VideoEncoderCore {
             }
         }
     }
+
 }

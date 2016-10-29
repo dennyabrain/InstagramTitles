@@ -1,5 +1,6 @@
 package AudioRecorder;
 
+import android.media.MediaMuxer;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -33,16 +34,12 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
 
     public AudioRecorderHandlerThread(String name) {
         super(name);
-        mediaMuxerWrapper = new MediaMuxerWrapper();
-        audioEncoder = new AudioEncoder(mediaMuxerWrapper);
-        audioRecorder = new AudioRecorder(audioEncoder);
+
     }
 
     public AudioRecorderHandlerThread(String name, int priority) {
         super(name, priority);
-        mediaMuxerWrapper = new MediaMuxerWrapper();
-        audioEncoder = new AudioEncoder(mediaMuxerWrapper);
-        audioRecorder = new AudioRecorder(audioEncoder);
+
     }
 
     public void setCallback(Handler cb){
@@ -75,7 +72,7 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
     }
 
     public void startRecording(){
-        Log.d(TAG, "stop Recording");
+        Log.d(TAG, "start Recording");
         Message msg = Message.obtain(null, MSG_RECORDING_START);
         mHandler.sendMessage(msg);
     }
@@ -85,5 +82,11 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
         audioRecorder.setIsRecordingFalse();
         Message msg = Message.obtain(null, MSG_RECORDING_STOP);
         mHandler.sendMessage(msg);
+    }
+
+    public void setMuxer(MediaMuxer mxr){
+        mediaMuxerWrapper = new MediaMuxerWrapper(mxr);
+        audioEncoder = new AudioEncoder(mediaMuxerWrapper);
+        audioRecorder = new AudioRecorder(audioEncoder);
     }
 }

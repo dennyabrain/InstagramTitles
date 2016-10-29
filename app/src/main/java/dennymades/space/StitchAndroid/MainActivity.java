@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.media.MediaMuxer;
 import android.opengl.GLSurfaceView;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -19,16 +22,22 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import java.io.IOException;
+
 import AudioRecorder.AudioRecorderHandlerThread;
 import EmojiTextView.MyEmojiTextView;
 import EmojiTextView.TextControlFragment;
+import Encoder.TextureMovieEncoder;
+import Encoder.VideoEncoderCore;
 import Mediator.StitchMediator;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 import util.Compatibility;
+import util.FileManager;
+import util.Messages;
 import util.Permission;
 
-public class MainActivity extends AppCompatActivity implements TextControlFragment.onTextFragmentButtonClickedListener {
+public class MainActivity extends AppCompatActivity implements TextControlFragment.onTextFragmentButtonClickedListener, Handler.Callback {
     private static String TAG = "Main Activity : ";
     private String[] permissions = {Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -53,6 +62,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     //Mediator
     private StitchMediator stitchMediator;
 
+    private MediaMuxer mMuxer;
+
+    private Handler mainActivityHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +81,16 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
         setContentView(R.layout.activity_main);
 
+        mainActivityHandler = new Handler(this);
+
         myGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.renderer_view);
 
+        try {
+            mMuxer = new MediaMuxer(FileManager.getOutputMediaFile(2).toString(),
+                    MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+        } catch (IOException e) {
+            Log.d(TAG, "IO exception creating new muxer - ",e);
+        }
         //mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
         mEmojiconEditText=(EmojiconEditText)findViewById(R.id.editEmojicon);
         //mEmojiconTextView=(EmojiconTextView) findViewById(R.id.emojiconTextView);
@@ -111,9 +132,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     protected void onResume() {
         super.onResume();
         audioRecorderHandlerThread = new AudioRecorderHandlerThread("Audio Recorder Thread", Process.THREAD_PRIORITY_URGENT_AUDIO);
-        //audioRecorderHandlerThread.setCallback(UIHandler);
+        audioRecorderHandlerThread.setCallback(mainActivityHandler);
         audioRecorderHandlerThread.start();
         myGLSurfaceView.setAudioRecorderHandler(audioRecorderHandlerThread);
+        myGLSurfaceView.setCallback(mainActivityHandler);
         stitchMediator.resumeEncoding();
     }
 
@@ -179,5 +201,18 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             stitchMediator.setBitmapShow(true);
         }
         stitchMediator.onFabRecordClicked();
+    }
+
+    @Override
+    public boolean handleMessage(Message message) {
+        switch(message.what){
+            case Messages.REQUEST_MUXER:
+                Log.d(TAG, "REQUEST FOR MUXER RECEIVED");
+                TextureMovieEncoder t = myGLSurfaceView.getTextureMovieEncoder();
+                t.setMuxer(mMuxer);
+                audioRecorderHandlerThread.setMuxer(mMuxer);
+                break;
+        }
+        return true;
     }
 }

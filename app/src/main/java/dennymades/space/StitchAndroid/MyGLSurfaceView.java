@@ -8,12 +8,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.media.MediaMuxer;
 import android.opengl.EGL14;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.hardware.Camera.Size;
 import android.util.Log;
@@ -32,6 +35,7 @@ import BitmapOverlay.BitmapOverlay;
 import BitmapOverlay.BitmapTextureShader;
 import Encoder.TextureMovieEncoder;
 import util.FileManager;
+import util.Messages;
 import util.TriangleHelper;
 
 /**
@@ -42,6 +46,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private String TAG = this.getClass().getName();
 
     private Context mContext;
+
+    private Handler mMainActivityCallback;
 
     /**
      * Camera and SurfaceTexture
@@ -64,7 +70,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private float[] mRatio = new float[2];
 
     //Grafika Renderer stuff
-    private static TextureMovieEncoder mVideoEncoder = new TextureMovieEncoder();
+    private TextureMovieEncoder mVideoEncoder = new TextureMovieEncoder();
     private static File mOutpuFile;
     private int mTextureId;
     private boolean beginRecording =false;
@@ -124,6 +130,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     @Override
     public synchronized void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //load and compile shader
+        mMainActivityCallback.sendMessage(Message.obtain(null, Messages.REQUEST_MUXER));
         Log.d("Denny", "SurfaceCreated");
         th = new TriangleHelper();
         try {
@@ -341,4 +348,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         mAudioRecordHandlerThread = arht;
     }
 
+    public void setCallback(Handler h){
+        mMainActivityCallback = h;
+    }
+
+    public TextureMovieEncoder getTextureMovieEncoder(){
+        return mVideoEncoder;
+    }
 }

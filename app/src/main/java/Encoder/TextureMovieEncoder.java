@@ -17,6 +17,8 @@
 package Encoder;
 
 import android.graphics.SurfaceTexture;
+import android.media.MediaMuxer;
+import android.media.MediaRecorder;
 import android.opengl.EGLContext;
 import android.opengl.GLES20;
 import android.os.Handler;
@@ -60,6 +62,8 @@ public class TextureMovieEncoder implements Runnable {
     private static final String TAG = "TextureMovieEncoder";
     private static final boolean VERBOSE = false;
 
+    private MediaMuxer mMuxer;
+
     private static final int MSG_START_RECORDING = 0;
     private static final int MSG_STOP_RECORDING = 1;
     private static final int MSG_FRAME_AVAILABLE = 2;
@@ -83,6 +87,7 @@ public class TextureMovieEncoder implements Runnable {
     private boolean mRunning;
 
     private TriangleHelper mTriangle;
+
 
     /**
      * Encoder configuration.
@@ -384,7 +389,7 @@ public class TextureMovieEncoder implements Runnable {
     private void prepareEncoder(EGLContext sharedContext, int width, int height, int bitRate,
             File outputFile) {
         try {
-            mVideoEncoder = new VideoEncoderCore(width, height, bitRate, outputFile);
+            mVideoEncoder = new VideoEncoderCore(width, height, bitRate, outputFile, mMuxer);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
@@ -428,4 +433,9 @@ public class TextureMovieEncoder implements Runnable {
     public void setTriangle(TriangleHelper triangle){
         mTriangle = triangle;
     }
+
+    public void setMuxer(MediaMuxer mxr){
+        mMuxer = mxr;
+    }
+
 }

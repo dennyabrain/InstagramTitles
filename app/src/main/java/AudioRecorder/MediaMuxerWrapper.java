@@ -21,13 +21,16 @@ public class MediaMuxerWrapper {
     private MediaFormat audioFormat;
     private int audioTrackIndex;
 
-    public MediaMuxerWrapper(){
-        outputFile = FileManager.getOutputMediaFile(2).toString();
+    public MediaMuxerWrapper(MediaMuxer mxr){
+        muxer = mxr;
+
+        /*outputFile = FileManager.getOutputMediaFile(2).toString();
+        //muxer = mxr;
         try {
             muxer = new MediaMuxer(outputFile, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
         } catch (IOException e) {
             Log.d(TAG, "exception creating new media muxer ", e);
-        }
+        }*/
     }
 
     public void addAudioEncoder(AudioEncoder encoder){
@@ -38,13 +41,13 @@ public class MediaMuxerWrapper {
 
     public void startMuxing(){
         isMuxing = true;
-        muxer.start();
+        //muxer.start();
     }
 
     public void stopMuxing(){
         isMuxing = false;
-        muxer.stop();
-        muxer.release();
+        //muxer.stop();
+        //muxer.release();
     }
 
     public void muxAudio(ByteBuffer buffer, MediaCodec.BufferInfo bufferInfo){

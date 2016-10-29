@@ -11,4 +11,6 @@ public class Messages {
     public static final int MSG_VIDEO_RECORDING_STOP_CALLBACK = 201;
 
     public static final int MSG_CHANGE_BUTTON_TEXT=300;
+
+    public static final int REQUEST_MUXER = 400;
 }
