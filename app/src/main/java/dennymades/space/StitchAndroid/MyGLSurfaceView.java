@@ -26,6 +26,7 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import AudioRecorder.AudioRecorderHandlerThread;
 import BitmapOverlay.BitmapData;
 import BitmapOverlay.BitmapOverlay;
 import BitmapOverlay.BitmapTextureShader;
@@ -81,6 +82,9 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public static int mBmpTextureId;
     public boolean showBitmap=false;
     public boolean initBitmapShow=false;
+
+    //Audio Encoder
+    private AudioRecorderHandlerThread mAudioRecordHandlerThread;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -305,6 +309,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public void stopRecording(){
         Log.d(TAG, "in stopRecording func");
         mVideoEncoder.stopRecording();
+        mAudioRecordHandlerThread.stopRecording();
     }
 
     public void startRecording(){
@@ -312,6 +317,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, 480, 640, 100000, EGL14.eglGetCurrentContext()));
         Log.d(TAG, "egl context : "+EGL14.eglGetCurrentContext().toString());
         beginRecording=true;
+        mAudioRecordHandlerThread.startRecording();
     }
 
     public void setBitmap(Bitmap bmp){
@@ -329,6 +335,10 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     public void setBitmapShow(boolean flag){
         initBitmapShow=flag;
+    }
+
+    public void setAudioRecorderHandler(AudioRecorderHandlerThread arht){
+        mAudioRecordHandlerThread = arht;
     }
 
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.opengl.GLSurfaceView;
+import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -17,11 +19,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import AudioRecorder.AudioRecorderHandlerThread;
 import EmojiTextView.MyEmojiTextView;
 import EmojiTextView.TextControlFragment;
 import Mediator.StitchMediator;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
+import util.Compatibility;
 import util.Permission;
 
 public class MainActivity extends AppCompatActivity implements TextControlFragment.onTextFragmentButtonClickedListener {
@@ -38,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
     public static Bitmap mEmojiTextBitmap;
     FloatingActionButton fab;
+
+    private AudioRecorderHandlerThread audioRecorderHandlerThread;
+    private MyGLSurfaceView myGLSurfaceView;
 
     //FAB Logic
     //boolean isFabOpen=false;
@@ -60,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         }
 
         setContentView(R.layout.activity_main);
+
+        myGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.renderer_view);
+
         //mRenderer = (MyGLSurfaceView)findViewById(R.id.renderer_view);
         mEmojiconEditText=(EmojiconEditText)findViewById(R.id.editEmojicon);
         //mEmojiconTextView=(EmojiconTextView) findViewById(R.id.emojiconTextView);
@@ -90,12 +100,20 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     @Override
     protected void onPause() {
         super.onPause();
+        if(Compatibility.isCompatible(16))
+            audioRecorderHandlerThread.quit();
+        else
+            audioRecorderHandlerThread.quitSafely();
         super.onStop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        audioRecorderHandlerThread = new AudioRecorderHandlerThread("Audio Recorder Thread", Process.THREAD_PRIORITY_URGENT_AUDIO);
+        //audioRecorderHandlerThread.setCallback(UIHandler);
+        audioRecorderHandlerThread.start();
+        myGLSurfaceView.setAudioRecorderHandler(audioRecorderHandlerThread);
         stitchMediator.resumeEncoding();
     }
 
