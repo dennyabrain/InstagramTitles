@@ -24,6 +24,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -57,20 +58,20 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     //private final FBORenderTarget mRenderTarget = new FBORenderTarget();
     private final OESTexture mCameraTexture = new OESTexture();
-    private final Shader mOffscreenShader = new Shader();
+    public static final Shader mOffscreenShader = new Shader();
     private int mWidth, mHeight;
     private boolean updateTexture = false;
 
     /**
      * OpenGL params
      */
-    private ByteBuffer mFullQuadVertices;
-    private float[] mTransformM = new float[16];
+    public static ByteBuffer mFullQuadVertices;
+    public static float[] mTransformM = new float[16];
     public static float[] mOrientationM = new float[16];
-    private float[] mRatio = new float[2];
+    public static float[] mRatio = new float[2];
 
     //Grafika Renderer stuff
-    private TextureMovieEncoder mVideoEncoder = new TextureMovieEncoder();
+    private TextureMovieEncoder mVideoEncoder = new TextureMovieEncoder(this);
     private static File mOutpuFile;
     private int mTextureId;
     private boolean beginRecording =false;
@@ -88,6 +89,9 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public static int mBmpTextureId;
     public boolean showBitmap=false;
     public boolean initBitmapShow=false;
+
+    int paramLocation;
+    private Calendar calendar;
 
     //Audio Encoder
     private AudioRecorderHandlerThread mAudioRecordHandlerThread;
@@ -118,6 +122,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
         //OutpuFile
         mOutpuFile = FileManager.getOutputMediaFile(2);
+        calendar = Calendar.getInstance();
     }
 
     @Override
@@ -139,6 +144,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         mVideoEncoder.setTriangle(th);
         mBitmap = new BitmapData();
@@ -255,37 +261,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //render the texture to FBO if new frame is available
         //GLES20.glViewport(0, 0, mWidth, mHeight);
 
-        mOffscreenShader.useProgram();
-
-        int uTransformM = mOffscreenShader.getHandle("uTransformM");
-        int uOrientationM = mOffscreenShader.getHandle("uOrientationM");
-        int uRatioV = mOffscreenShader.getHandle("ratios");
-
-        GLES20.glUniformMatrix4fv(uTransformM, 1, false, mTransformM, 0);
-        GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
-        GLES20.glUniform2fv(uRatioV, 1, mRatio, 0);
-
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-//TADA        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mCameraTexture.getTextureId());
-        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
-
-        renderQuad(mOffscreenShader.getHandle("aPosition"));
-
-        //th.drawTriangle();
-        GLES20.glFlush();
-
-        if(initBitmapShow==true){
-            setBitmap(MainActivity.mEmojiTextBitmap);
-            initBitmapShow=false;
-        }
-
-        if(showBitmap==true) {
-            mBitmapShader.useTheProgram();
-            mBitmapShader.setUniforms(mOrientationM, mBmpTextureId);
-            mBitmap.bindData(mBitmapShader);
-            mBitmap.draw();
-        }
-
+        //draw frame content
+        drawFrameContent();
 
         mVideoEncoder.setTextureId(mTextureId);
         if(beginRecording==true){
@@ -294,7 +271,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
     }
 
-    private void renderQuad(int aPosition){
+    public static void renderQuad(int aPosition){
         GLES20.glVertexAttribPointer(aPosition, 2, GLES20.GL_BYTE, false, 0, mFullQuadVertices);
         GLES20.glEnableVertexAttribArray(aPosition);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
@@ -346,6 +323,44 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     public void setAudioRecorderHandler(AudioRecorderHandlerThread arht){
         mAudioRecordHandlerThread = arht;
+    }
+
+    public void drawFrameContent(){
+        mOffscreenShader.useProgram();
+
+        int uTransformM = mOffscreenShader.getHandle("uTransformM");
+        int uOrientationM = mOffscreenShader.getHandle("uOrientationM");
+        int uRatioV = mOffscreenShader.getHandle("ratios");
+        paramLocation = mOffscreenShader.getHandle("param");
+
+        GLES20.glUniformMatrix4fv(uTransformM, 1, false, mTransformM, 0);
+        GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
+        GLES20.glUniform2fv(uRatioV, 1, mRatio, 0);
+
+        float param = System.currentTimeMillis()/1000;
+        Log.d(TAG, "seconds : "+param);
+        GLES20.glUniform1f(paramLocation, param);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+//TADA        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mCameraTexture.getTextureId());
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
+
+        renderQuad(mOffscreenShader.getHandle("aPosition"));
+
+        //th.drawTriangle();
+        GLES20.glFlush();
+
+        if(initBitmapShow==true){
+            setBitmap(MainActivity.mEmojiTextBitmap);
+            initBitmapShow=false;
+        }
+
+        if(showBitmap==true) {
+            mBitmapShader.useTheProgram();
+            mBitmapShader.setUniforms(mOrientationM, mBmpTextureId);
+            mBitmap.bindData(mBitmapShader);
+            mBitmap.draw();
+        }
     }
 
     public void setCallback(Handler h){

@@ -20,6 +20,7 @@ import android.graphics.SurfaceTexture;
 import android.media.MediaMuxer;
 import android.media.MediaRecorder;
 import android.opengl.EGLContext;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.os.Handler;
 import android.os.Looper;
@@ -88,6 +89,11 @@ public class TextureMovieEncoder implements Runnable {
 
     private TriangleHelper mTriangle;
 
+    private MyGLSurfaceView glSurfaceView;
+
+    public TextureMovieEncoder(MyGLSurfaceView myGLSurfaceView){
+        glSurfaceView = myGLSurfaceView;
+    }
 
     /**
      * Encoder configuration.
@@ -329,16 +335,11 @@ public class TextureMovieEncoder implements Runnable {
     private void handleFrameAvailable(float[] transform, long timestampNanos) {
         if (VERBOSE) Log.d(TAG, "handleFrameAvailable tr=" + transform);
         mVideoEncoder.drainEncoder(false);
-        mFullScreen.drawFrame(mTextureId, transform);
+        //mFullScreen.drawFrame(mTextureId, transform);
 
-        //drawBox(mFrameNum++);
+        //REPLACED CODE
 
-        //mTriangle.drawTriangle();
-        //MyGLSurfaceView.mBitmap.draw();
-        MyGLSurfaceView.mBitmapShader.useTheProgram();
-        MyGLSurfaceView.mBitmapShader.setUniforms(MyGLSurfaceView.mOrientationM, MyGLSurfaceView.mBmpTextureId);
-        MyGLSurfaceView.mBitmap.bindData(MyGLSurfaceView.mBitmapShader);
-        MyGLSurfaceView.mBitmap.draw();
+        glSurfaceView.drawFrameContent();
 
         mInputWindowSurface.setPresentationTime(timestampNanos);
         mInputWindowSurface.swapBuffers();
