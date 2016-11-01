@@ -11,6 +11,7 @@
         android:id="@+id/renderer_view"
         android:layout_width="match_parent"
         android:clipChildren="false"
+        android:onClick="btnSurface"
         android:layout_height="match_parent"/>
 
     <io.github.rockerhieu.emojicon.EmojiconEditText

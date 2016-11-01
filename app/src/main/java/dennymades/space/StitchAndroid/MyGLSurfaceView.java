@@ -58,10 +58,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     //private final FBORenderTarget mRenderTarget = new FBORenderTarget();
     private final OESTexture mCameraTexture = new OESTexture();
-    public static final Shader mOffscreenShader = new Shader();
+    public static Shader[] mOffscreenShader;
+    private int shaderIndex = 0;
     private int mWidth, mHeight;
     private boolean updateTexture = false;
 
+    int[] a = new int[5];
     /**
      * OpenGL params
      */
@@ -97,6 +99,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     int dir = 1;
     long globalStartTime;
     private Calendar calendar;
+
+    private float filterRadius;
+    private int filterRadiusLocation;
+    private int filterSection;
+    private float mX, mY;
+    private int mXLocation, mYLocation;
 
     //Audio Encoder
     private AudioRecorderHandlerThread mAudioRecordHandlerThread;
@@ -144,8 +152,20 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         mMainActivityCallback.sendMessage(Message.obtain(null, Messages.REQUEST_MUXER));
         Log.d("Denny", "SurfaceCreated");
         th = new TriangleHelper();
+        mOffscreenShader = new Shader[6];
         try {
-            mOffscreenShader.setProgram(R.raw.vertex_shader, R.raw.fragment_shader, mContext);
+            mOffscreenShader[0] = new Shader();
+            mOffscreenShader[0].setProgram(R.raw.vertex_shader, R.raw.fragment_shader, mContext);
+            mOffscreenShader[1] = new Shader();
+            mOffscreenShader[1].setProgram(R.raw.vertex_shader, R.raw.fragment_shader2, mContext);
+            mOffscreenShader[2] = new Shader();
+            mOffscreenShader[2].setProgram(R.raw.vertex_shader, R.raw.fragment_shader3, mContext);
+            mOffscreenShader[3] = new Shader();
+            mOffscreenShader[3].setProgram(R.raw.vertex_shader, R.raw.fragment_shader4, mContext);
+            mOffscreenShader[4] = new Shader();
+            mOffscreenShader[4].setProgram(R.raw.vertex_shader, R.raw.fragment_shader5, mContext);
+            mOffscreenShader[5] = new Shader();
+            mOffscreenShader[5].setProgram(R.raw.vertex_shader, R.raw.fragment_shader6, mContext);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -159,19 +179,6 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         } catch (Exception e) {
             Log.d(TAG, "exception creating bitmap texture : ", e);
         }
-
-        /*emoji = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.emoji);
-        if()
-        try {
-            //bmpOverlay = new BitmapOverlay(emoji);
-            bmpOverlay = new BitmapOverlay();
-            bmpOverlay.loadBitmap();
-            Bitmap temp = bmpOverlay.getBitmap();
-            bmpOverlay.setStuff(temp);
-            mBmpTextureId = bmpOverlay.getTextureId();
-        } catch (Exception e) {
-            Log.d(TAG, "exception binding bitmap to texture", e);
-        }*/
     }
 
     @SuppressLint("NewApi")
@@ -313,9 +320,6 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public void setBitmap(Bitmap bmp){
         try {
             bmpOverlay = new BitmapOverlay(bmp, camera_width, camera_height);
-            //bmpOverlay.loadBitmap();
-            //Bitmap temp = bmpOverlay.getBitmap();
-            //bmpOverlay.setStuff(temp);
             mBmpTextureId = bmpOverlay.getTextureId();
         } catch (Exception e) {
             Log.d(TAG, "exception setting Bitmap", e);
@@ -332,20 +336,27 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     }
 
     public void drawFrameContent(){
-        mOffscreenShader.useProgram();
+        mOffscreenShader[shaderIndex].useProgram();
 
-        int uTransformM = mOffscreenShader.getHandle("uTransformM");
-        int uOrientationM = mOffscreenShader.getHandle("uOrientationM");
-        int uRatioV = mOffscreenShader.getHandle("ratios");
-        paramLocation = mOffscreenShader.getHandle("param");
-        param2Location = mOffscreenShader.getHandle("param2");
+        int uTransformM = mOffscreenShader[shaderIndex].getHandle("uTransformM");
+        int uOrientationM = mOffscreenShader[shaderIndex].getHandle("uOrientationM");
+        int uRatioV = mOffscreenShader[shaderIndex].getHandle("ratios");
+        paramLocation = mOffscreenShader[shaderIndex].getHandle("param");
+        param2Location = mOffscreenShader[shaderIndex].getHandle("param2");
+        filterRadiusLocation = mOffscreenShader[shaderIndex].getHandle("filRad");
+        filterSection = mOffscreenShader[shaderIndex].getHandle("filSec");
+        mXLocation = mOffscreenShader[shaderIndex].getHandle("mX");
+        mYLocation = mOffscreenShader[shaderIndex].getHandle("mY");
 
         GLES20.glUniformMatrix4fv(uTransformM, 1, false, mTransformM, 0);
         GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
         GLES20.glUniform2fv(uRatioV, 1, mRatio, 0);
 
-        float currentTime = (System.nanoTime() - globalStartTime) / 1000000000f;
+        mX = 0.3f; mY = 0.3f; filterRadius=0.2f;
+        GLES20.glUniform1f(mXLocation, mX);
+        GLES20.glUniform1f(mYLocation, mY);
 
+        float currentTime = (System.nanoTime() - globalStartTime) / 1000000000f;
         param = currentTime%100;
         //Log.d(TAG, "seconds : "+param);
         GLES20.glUniform1f(paramLocation, param);
@@ -355,11 +366,14 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
         GLES20.glUniform1f(param2Location, param2);
 
+        GLES20.glUniform1f(filterSection, 1);
+        GLES20.glUniform1f(filterRadiusLocation, filterRadius);
+
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-//TADA        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mCameraTexture.getTextureId());
+//TADA  GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mCameraTexture.getTextureId());
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
 
-        renderQuad(mOffscreenShader.getHandle("aPosition"));
+        renderQuad(mOffscreenShader[shaderIndex].getHandle("aPosition"));
 
         //th.drawTriangle();
         GLES20.glFlush();
@@ -377,6 +391,15 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
     }
 
+    public void drawTransitionFrameContent(float x, float y, float r){
+        //draw using previous program;
+        //draw the region inside the circle
+
+
+        //draw using current program;
+        //draw the regin outside the circle
+    }
+
     public void setCallback(Handler h){
         mMainActivityCallback = h;
     }
@@ -388,4 +411,13 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public void setParam(float v){
         param2 = v;
     }
+
+    public void incrementShaderIndex(){
+        shaderIndex=(shaderIndex+1)%6;
+    }
+
+    public void updateRadius(float r){
+        filterRadius = r;
+    }
+
 }

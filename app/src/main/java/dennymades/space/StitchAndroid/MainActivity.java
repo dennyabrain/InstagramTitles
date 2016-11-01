@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     private AudioRecorderHandlerThread audioRecorderHandlerThread;
     private MyGLSurfaceView myGLSurfaceView;
 
+    private FilterTransition mFilterTransition;
+
     //FAB Logic
     //boolean isFabOpen=false;
     //private RecordingProgressBar mProgressBar;
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
         //mProgressBar = new RecordingProgressBar(this);
         stitchMediator = new StitchMediator(this, this);
+
+        mFilterTransition = new FilterTransition(this, 10.0f);
     }
 
     @Override
@@ -179,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         }
     }
 
+    public void btnSurface(View v){
+        myGLSurfaceView.incrementShaderIndex();
+        mFilterTransition.start();
+    }
+
     @Override
     public void onTextPropertyClicked(String label) {
         myEmojiTextView.setColor(label);
@@ -215,5 +224,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
                 break;
         }
         return true;
+    }
+
+    public void updateRadius(float r){
+        Log.d(TAG, "radius value : "+r);
+        myGLSurfaceView.updateRadius(r);
     }
 }
