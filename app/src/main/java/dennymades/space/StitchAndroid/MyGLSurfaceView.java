@@ -91,6 +91,9 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public boolean initBitmapShow=false;
 
     int paramLocation;
+    float param = 1.0f;
+    int dir = 1;
+    long globalStartTime;
     private Calendar calendar;
 
     //Audio Encoder
@@ -135,6 +138,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     @Override
     public synchronized void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //load and compile shader
+        globalStartTime = System.nanoTime();
         mMainActivityCallback.sendMessage(Message.obtain(null, Messages.REQUEST_MUXER));
         Log.d("Denny", "SurfaceCreated");
         th = new TriangleHelper();
@@ -337,8 +341,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
         GLES20.glUniform2fv(uRatioV, 1, mRatio, 0);
 
-        float param = System.currentTimeMillis()/1000;
-        Log.d(TAG, "seconds : "+param);
+        float currentTime = (System.nanoTime() - globalStartTime) / 1000000000f;
+
+        param = currentTime%100;
+        //Log.d(TAG, "seconds : "+param);
+
         GLES20.glUniform1f(paramLocation, param);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);

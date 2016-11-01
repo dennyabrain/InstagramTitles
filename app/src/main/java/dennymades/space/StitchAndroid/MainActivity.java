@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.renderer_view);
 
         try {
-            mMuxer = new MediaMuxer(FileManager.getOutputMediaFile(2).toString(),
+                mMuxer = new MediaMuxer(FileManager.getOutputMediaFile(2).toString(),
                     MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
         } catch (IOException e) {
             Log.d(TAG, "IO exception creating new muxer - ",e);
