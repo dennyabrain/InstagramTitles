@@ -89,6 +89,7 @@ public class AudioRecorder {
 
                 bytebuffer.position(bufferReadResult);
                 bytebuffer.flip();
+
                 audioEncoder.encode(bytebuffer, bufferReadResult, audioEncoder.getPTSUs());
                 //send amplitude to myGLSurfaceView
                 byte[] a = bytebuffer.array();

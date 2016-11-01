@@ -5,15 +5,27 @@ uniform samplerExternalOES sTexture;
 varying vec2 vTextureCoord;
 
 const highp vec3 W = vec3(0.2989, 0.5870, 0.1140);
-uniform float param;
-uniform float param2;
+uniform float param; // time
+uniform float param2; // voice
+
+#define steps 2.
 
 void main() {
-    float stongth = sin(param2) * 0.5 + 0.5;
     vec2 uv = vTextureCoord;
-    float waveu = sin((uv.y + param2) * 20.0) * 0.5 * 0.05 * stongth;
-    //float wavev = sin((uv.x + param) * 20.0) * 0.5 * 0.05 * stongth;
-    gl_FragColor = texture2D(sTexture, uv + vec2(waveu, 0));
-    //gl_FragColor= vec4(stongth, 0.5f, 0.2f, 1.0f);
+
+    vec4 c = texture2D(sTexture,uv);
+    float g = max(c.r,max(c.g,c.b))*steps;
+    float fuck = 345.678+10.0;
+    float f = mod((uv.x+uv.y+500.)*sin(param2),1.);
+    if(mod(g,1.0)>f)
+        c.r = ceil(g);
+    else
+        c.r = floor(g);
+    c.r/=steps;
+
+    gl_FragColor = vec4(c.r, c.r, c.r, c.a);
+
+    //NORMAL PREVIEW
+    //gl_FragColor = texture2D(sTexture, vTextureCoord);
 }
 
