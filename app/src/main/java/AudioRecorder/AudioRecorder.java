@@ -38,6 +38,8 @@ public class AudioRecorder {
 
     private boolean isRecording;
 
+    private boolean isEncoding = false;
+
     private Handler mCallback;
 
     public AudioRecorder(AudioEncoder encoder, Handler UICallback){
@@ -66,6 +68,10 @@ public class AudioRecorder {
         isRecording = true;
     }
 
+    public void startEncoding(){
+        isEncoding = true;
+    }
+
     public void record(){
         final ByteBuffer bytebuffer = ByteBuffer.allocateDirect(SAMPLES_PER_FRAME);
         int bufferReadResult;
@@ -90,7 +96,9 @@ public class AudioRecorder {
                 bytebuffer.position(bufferReadResult);
                 bytebuffer.flip();
 
-                audioEncoder.encode(bytebuffer, bufferReadResult, audioEncoder.getPTSUs());
+                if(isEncoding){
+                    audioEncoder.encode(bytebuffer, bufferReadResult, audioEncoder.getPTSUs());
+                }
                 //send amplitude to myGLSurfaceView
                 byte[] a = bytebuffer.array();
                 float sum = 0;
@@ -98,7 +106,7 @@ public class AudioRecorder {
                     sum+=a[i];
                 }
                 float avg = Math.abs(sum/a.length);
-                Log.d(TAG, "avg : "+avg);
+                //Log.d(TAG, "avg : "+avg);
                 mCallback.sendMessage(Message.obtain(null, Messages.MSG_LOUDNESS, avg));
             }
         }
@@ -123,6 +131,7 @@ public class AudioRecorder {
 
     public void setIsRecordingFalse(){
         isRecording = false;
+        isEncoding = false;
     }
 
 

@@ -176,10 +176,6 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             mEmojiconEditText.setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
             myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
-            /*mEmojiconEditText.setVisibility(View.INVISIBLE);
-            myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
-            myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
-            btnText.setText("TEXT");*/
         }
     }
 
@@ -211,9 +207,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
                 TextureMovieEncoder t = myGLSurfaceView.getTextureMovieEncoder();
                 t.setMuxer(mMuxer);
                 audioRecorderHandlerThread.setMuxer(mMuxer);
+                audioRecorderHandlerThread.startRecording();
                 break;
             case Messages.MSG_LOUDNESS:
-                Log.d(TAG, "LOUDNESS RECEIVED : "+message.obj);
+                //Log.d(TAG, "LOUDNESS RECEIVED : "+message.obj);
                 myGLSurfaceView.setParam((float)(message.obj));
                 break;
         }

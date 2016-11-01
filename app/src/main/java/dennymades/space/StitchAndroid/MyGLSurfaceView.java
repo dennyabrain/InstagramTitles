@@ -307,7 +307,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //mVideoEncoder.startRecording(new TextureMovieEncoder.EncoderConfig(mOutpuFile, 480, 640, 100000, EGL14.eglGetCurrentContext()));
         Log.d(TAG, "egl context : "+EGL14.eglGetCurrentContext().toString());
         beginRecording=true;
-        mAudioRecordHandlerThread.startRecording();
+        mAudioRecordHandlerThread.startEncoding();
     }
 
     public void setBitmap(Bitmap bmp){
