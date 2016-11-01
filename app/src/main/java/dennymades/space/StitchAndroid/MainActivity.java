@@ -212,6 +212,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
                 t.setMuxer(mMuxer);
                 audioRecorderHandlerThread.setMuxer(mMuxer);
                 break;
+            case Messages.MSG_LOUDNESS:
+                //Log.d(TAG, "LOUDNESS RECEIVED : "+message.obj);
+                myGLSurfaceView.setParam((float)(message.obj));
+                break;
         }
         return true;
     }

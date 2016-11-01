@@ -6,6 +6,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
+import dennymades.space.StitchAndroid.MyGLSurfaceView;
 import util.Messages;
 
 /**
@@ -31,6 +32,8 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
 
     /* MediaMuxerWrapper object to add encoded data to a MediaMuxer which converts it to .mp4*/
     private MediaMuxerWrapper mediaMuxerWrapper;
+
+    private MyGLSurfaceView linkGLSurfaceView;
 
     public AudioRecorderHandlerThread(String name) {
         super(name);
@@ -87,6 +90,6 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
     public void setMuxer(MediaMuxer mxr){
         mediaMuxerWrapper = new MediaMuxerWrapper(mxr);
         audioEncoder = new AudioEncoder(mediaMuxerWrapper);
-        audioRecorder = new AudioRecorder(audioEncoder);
+        audioRecorder = new AudioRecorder(audioEncoder, mCallback);
     }
 }

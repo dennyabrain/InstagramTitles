@@ -13,4 +13,6 @@ public class Messages {
     public static final int MSG_CHANGE_BUTTON_TEXT=300;
 
     public static final int REQUEST_MUXER = 400;
+
+    public static final int MSG_LOUDNESS = 500;
 }

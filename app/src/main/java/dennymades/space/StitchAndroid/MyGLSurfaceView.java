@@ -92,6 +92,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     int paramLocation;
     float param = 1.0f;
+    int param2Location;
+    float param2 = 1.0f;
     int dir = 1;
     long globalStartTime;
     private Calendar calendar;
@@ -336,6 +338,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         int uOrientationM = mOffscreenShader.getHandle("uOrientationM");
         int uRatioV = mOffscreenShader.getHandle("ratios");
         paramLocation = mOffscreenShader.getHandle("param");
+        param2Location = mOffscreenShader.getHandle("param2");
 
         GLES20.glUniformMatrix4fv(uTransformM, 1, false, mTransformM, 0);
         GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
@@ -345,8 +348,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
         param = currentTime%100;
         //Log.d(TAG, "seconds : "+param);
-
         GLES20.glUniform1f(paramLocation, param);
+
+        if(param2<10){
+            param2 = 0.0f;
+        }
+        GLES20.glUniform1f(param2Location, param2);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 //TADA        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mCameraTexture.getTextureId());
@@ -376,5 +383,9 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     public TextureMovieEncoder getTextureMovieEncoder(){
         return mVideoEncoder;
+    }
+
+    public void setParam(float v){
+        param2 = v;
     }
 }

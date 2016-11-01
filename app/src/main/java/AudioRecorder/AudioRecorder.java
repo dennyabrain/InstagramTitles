@@ -3,9 +3,16 @@ package AudioRecorder;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Contacts;
 import android.util.Log;
 
 import java.nio.ByteBuffer;
+import java.util.Collection;
+import java.util.Collections;
+
+import util.Messages;
 
 /**
  * Created by abrain on 10/24/16.
@@ -31,7 +38,10 @@ public class AudioRecorder {
 
     private boolean isRecording;
 
-    public AudioRecorder(AudioEncoder encoder){
+    private Handler mCallback;
+
+    public AudioRecorder(AudioEncoder encoder, Handler UICallback){
+        mCallback = UICallback;
         audioEncoder = encoder;
         bufferSizeInBytes = AudioRecord.getMinBufferSize(SAMPLE_RATE,
                 CHANNEL_CONFIG,
@@ -69,7 +79,7 @@ public class AudioRecorder {
             }else if(bufferReadResult>=0){
                 //Log.d(TAG, "bytes read "+bufferReadResult);
                 // todo send this byte array to an audio encoder
-                Log.d(TAG, "going to encode "+bufferReadResult);
+                //Log.d(TAG, "going to encode "+bufferReadResult);
                 bytebuffer.position(bufferReadResult);
                 bytebuffer.flip();
                 byte[] bytes = new byte[bytebuffer.remaining()];
@@ -80,12 +90,21 @@ public class AudioRecorder {
                 bytebuffer.position(bufferReadResult);
                 bytebuffer.flip();
                 audioEncoder.encode(bytebuffer, bufferReadResult, audioEncoder.getPTSUs());
+                //send amplitude to myGLSurfaceView
+                byte[] a = bytebuffer.array();
+                float sum = 0;
+                for(int i=0;i<a.length;i++){
+                    sum+=a[i];
+                }
+                float avg = Math.abs(sum/a.length);
+                Log.d(TAG, "avg : "+avg);
+                mCallback.sendMessage(Message.obtain(null, Messages.MSG_LOUDNESS, avg));
             }
         }
     }
 
     public void sendEOS(){
-        Log.d(TAG, "sending EOS");
+        //Log.d(TAG, "sending EOS");
         final ByteBuffer bytebuffer = ByteBuffer.allocateDirect(SAMPLES_PER_FRAME);
         int bufferReadResult;
 

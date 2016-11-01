@@ -36,7 +36,7 @@ public class MediaMuxerWrapper {
     public void addAudioEncoder(AudioEncoder encoder){
         audioFormat = encoder.getEncoder().getOutputFormat();
         audioTrackIndex = muxer.addTrack(audioFormat);
-        Log.d(TAG, "added audio track");
+        //Log.d(TAG, "added audio track");
     }
 
     public void startMuxing(){
@@ -55,11 +55,11 @@ public class MediaMuxerWrapper {
             synchronized (muxer){
                 muxer.writeSampleData(audioTrackIndex, buffer, bufferInfo);
             }
-            Log.d(TAG, "muxed sample of length "+buffer.remaining());
+            //Log.d(TAG, "muxed sample of length "+buffer.remaining());
         }catch(IllegalArgumentException e){
-            Log.d(TAG, "argument to writeSampleData incorrect : ",e);
+            //Log.d(TAG, "argument to writeSampleData incorrect : ",e);
         }catch(IllegalStateException e){
-            Log.d(TAG, "muxer in illegal state : ",e);
+            //Log.d(TAG, "muxer in illegal state : ",e);
         }
     }
 }
