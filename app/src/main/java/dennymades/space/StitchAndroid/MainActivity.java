@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -86,6 +87,18 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         mainActivityHandler = new Handler(this);
 
         myGLSurfaceView = (MyGLSurfaceView) findViewById(R.id.renderer_view);
+        myGLSurfaceView.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //myGLSurfaceView.incrementShaderIndex();
+                if(motionEvent.getAction()==MotionEvent.ACTION_UP){
+                    mFilterTransition.start();
+                    myGLSurfaceView.updateTouchCoordinates(motionEvent.getX(), motionEvent.getY());
+                    return true;
+                }
+                return true;
+            }
+        });
 
         try {
                 mMuxer = new MediaMuxer(FileManager.getOutputMediaFile(2).toString(),
@@ -110,6 +123,15 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         stitchMediator = new StitchMediator(this, this);
 
         mFilterTransition = new FilterTransition(this, 10.0f);
+
+        //make app full screen
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
     @Override
@@ -184,8 +206,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     }
 
     public void btnSurface(View v){
-        myGLSurfaceView.incrementShaderIndex();
-        mFilterTransition.start();
+        //myGLSurfaceView.incrementShaderIndex();
+        //mFilterTransition.start();
     }
 
     @Override

@@ -39,6 +39,9 @@ import util.FileManager;
 import util.Messages;
 import util.TriangleHelper;
 
+import static android.opengl.GLES20.glBlendFunc;
+import static android.opengl.GLES20.glEnable;
+
 /**
  * Created by abrain on 9/8/16.
  */
@@ -100,10 +103,10 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     long globalStartTime;
     private Calendar calendar;
 
-    private float filterRadius;
+    private float filterRadius=1.0f;
     private int filterRadiusLocation;
     private int filterSection;
-    private float mX, mY;
+    private float mX=0.5f, mY=0.5f;
     private int mXLocation, mYLocation;
 
     //Audio Encoder
@@ -171,7 +174,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             e.printStackTrace();
         }
 
-        GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+        GLES20.glClearColor(1.0f, 1.0f, 0.0f, 0.0f);
         mVideoEncoder.setTriangle(th);
         mBitmap = new BitmapData();
         try {
@@ -336,6 +339,8 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     }
 
     public void drawFrameContent(){
+        glEnable(GL10.GL_BLEND);
+        glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
         mOffscreenShader[shaderIndex].useProgram();
 
         int uTransformM = mOffscreenShader[shaderIndex].getHandle("uTransformM");
@@ -352,7 +357,9 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
         GLES20.glUniform2fv(uRatioV, 1, mRatio, 0);
 
-        mX = 0.3f; mY = 0.3f; filterRadius=0.2f;
+        //mX = 1.0f; mY = 1.0f;
+
+        filterRadius=filterRadius;
         GLES20.glUniform1f(mXLocation, mX);
         GLES20.glUniform1f(mYLocation, mY);
 
@@ -361,12 +368,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //Log.d(TAG, "seconds : "+param);
         GLES20.glUniform1f(paramLocation, param);
 
-        if(param2<10){
+        if(param2<4){
             param2 = 0.0f;
         }
         GLES20.glUniform1f(param2Location, param2);
 
-        GLES20.glUniform1f(filterSection, 1);
+        GLES20.glUniform1i(filterSection, 1);
         GLES20.glUniform1f(filterRadiusLocation, filterRadius);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -417,7 +424,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     }
 
     public void updateRadius(float r){
-        filterRadius = r;
+        filterRadius = r*2;
+    }
+
+    public void updateTouchCoordinates(float x, float y){
+        mX = x/camera_width;
+        mY = x/camera_height;
     }
 
 }

@@ -4,21 +4,23 @@ import android.animation.Animator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.util.Log;
+import android.view.animation.Animation;
 
 /**
  * Created by abrain on 11/1/16.
  */
-public class FilterTransition implements ValueAnimator.AnimatorUpdateListener{
+public class FilterTransition implements ValueAnimator.AnimatorUpdateListener, ValueAnimator.AnimatorListener{
     private ValueAnimator animator;
     private MainActivity mActivity;
     private final String TAG = FilterTransition.class.getSimpleName();
 
     public FilterTransition(MainActivity activity, float height){
         mActivity = activity;
-        animator = ValueAnimator.ofFloat(0.0f, 500.0f);
-        animator.setDuration(250);
-        animator.setInterpolator(new android.view.animation.BounceInterpolator());
+        animator = ValueAnimator.ofFloat(0.0f, 100.0f);
+        animator.setDuration(500);
+        animator.setInterpolator(new android.view.animation.AccelerateInterpolator());
         animator.addUpdateListener(this);
+        animator.addListener(this);
     }
 
     public void start(){
@@ -30,6 +32,27 @@ public class FilterTransition implements ValueAnimator.AnimatorUpdateListener{
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
         //update value of radius in myGlSurfaceView
         Log.d(TAG, "animation updating");
-        mActivity.updateRadius((float)valueAnimator.getAnimatedValue());
+        mActivity.updateRadius((float)valueAnimator.getAnimatedFraction());
+    }
+
+    @Override
+    public void onAnimationStart(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animator) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animator) {
+        Log.d(TAG, "animation ended");
+        mActivity.updateRadius(1.0f);
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animator) {
+
     }
 }
