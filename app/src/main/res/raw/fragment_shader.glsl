@@ -12,6 +12,9 @@ uniform int filSec;
 uniform float mX;
 uniform float mY;
 
+void render(){
+    gl_FragColor = texture2D(sTexture, vTextureCoord);
+}
 
 void main() {
     float one = pow(vTextureCoord.x-mX, 2.0);
@@ -19,17 +22,12 @@ void main() {
     float three = pow(filRad, 2.0);
     if(filSec==1){
         if(one+two<three){
-            gl_FragColor = texture2D(sTexture, vTextureCoord);
-        }else{
-            gl_FragColor = vec4(0.0, 1.0, 0.5, 0.0);
+            render();
         }
     }else{
-        if(one+two>three){
-            gl_FragColor = texture2D(sTexture, vTextureCoord);
-        }else{
-            gl_FragColor = vec4(0.0, 1.0, 0.5, 0.0);
-        }
-    }
-
+         if(one+two>three){
+             render();
+         }
+     }
 }
 

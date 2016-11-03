@@ -62,7 +62,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     //private final FBORenderTarget mRenderTarget = new FBORenderTarget();
     private final OESTexture mCameraTexture = new OESTexture();
     public static Shader[] mOffscreenShader;
-    private int shaderIndex = 0;
+    private int shaderIndex = 5;
     private int mWidth, mHeight;
     private boolean updateTexture = false;
 
@@ -106,6 +106,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     private float filterRadius=1.0f;
     private int filterRadiusLocation;
     private int filterSection;
+    private int mFilterTransitionState=0; //0 : not transitioning; 1 : mid transition
     private float mX=0.5f, mY=0.5f;
     private int mXLocation, mYLocation;
 
@@ -174,7 +175,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             e.printStackTrace();
         }
 
-        GLES20.glClearColor(1.0f, 1.0f, 0.0f, 0.0f);
+        GLES20.glClearColor(0.96f, 0.94f, 0.32f, 1.0f);
         mVideoEncoder.setTriangle(th);
         mBitmap = new BitmapData();
         try {
@@ -263,7 +264,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
 
         synchronized (this){
             if(updateTexture){
@@ -278,7 +279,25 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //GLES20.glViewport(0, 0, mWidth, mHeight);
 
         //draw frame content
-        drawFrameContent();
+        //drawFrameContent();
+        //drawFrameContent(shaderIndex, 1);
+        //drawFrameContent(shaderIndex+1, -1);
+
+        /* Is the filter in transition state?
+        *   if yes:
+        *       drawFrameContent with current shader's index and direction 1
+        *       drawFrameContent with current shader's index+1 and direction -1
+        *           update current shaderindex once animation ends.
+        *   if no :
+        *       drawFrameContent with current shader's index
+         */
+        if(mFilterTransitionState==1){
+            drawFrameContent((shaderIndex+1)%6, 1);
+            drawFrameContent(shaderIndex, -1);
+        }else if(mFilterTransitionState==0){
+            filterRadius=1;
+            drawFrameContent(shaderIndex, 1);
+        }
 
         mVideoEncoder.setTextureId(mTextureId);
         if(beginRecording==true){
@@ -398,6 +417,66 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
     }
 
+    public void drawFrameContent(int index, int direction){
+        glEnable(GL10.GL_BLEND);
+        glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+        mOffscreenShader[index].useProgram();
+
+        int uTransformM = mOffscreenShader[index].getHandle("uTransformM");
+        int uOrientationM = mOffscreenShader[index].getHandle("uOrientationM");
+        int uRatioV = mOffscreenShader[index].getHandle("ratios");
+        paramLocation = mOffscreenShader[index].getHandle("param");
+        param2Location = mOffscreenShader[index].getHandle("param2");
+        filterRadiusLocation = mOffscreenShader[index].getHandle("filRad");
+        filterSection = mOffscreenShader[index].getHandle("filSec");
+        mXLocation = mOffscreenShader[index].getHandle("mX");
+        mYLocation = mOffscreenShader[index].getHandle("mY");
+
+        GLES20.glUniformMatrix4fv(uTransformM, 1, false, mTransformM, 0);
+        GLES20.glUniformMatrix4fv(uOrientationM, 1, false, mOrientationM, 0);
+        GLES20.glUniform2fv(uRatioV, 1, mRatio, 0);
+
+        //mX = 1.0f; mY = 1.0f;
+
+        filterRadius=filterRadius;
+        GLES20.glUniform1f(mXLocation, mX);
+        GLES20.glUniform1f(mYLocation, mY);
+
+        float currentTime = (System.nanoTime() - globalStartTime) / 1000000000f;
+        param = currentTime%100;
+        //Log.d(TAG, "seconds : "+param);
+        GLES20.glUniform1f(paramLocation, param);
+
+        if(param2<4){
+            param2 = 0.0f;
+        }
+        GLES20.glUniform1f(param2Location, param2);
+
+        GLES20.glUniform1i(filterSection, direction);
+        GLES20.glUniform1f(filterRadiusLocation, filterRadius);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+//TADA  GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mCameraTexture.getTextureId());
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId);
+
+        renderQuad(mOffscreenShader[shaderIndex].getHandle("aPosition"));
+
+        //th.drawTriangle();
+        GLES20.glFlush();
+
+        if(initBitmapShow==true){
+            setBitmap(MainActivity.mEmojiTextBitmap);
+            initBitmapShow=false;
+        }
+
+        if(showBitmap==true) {
+            mBitmapShader.useTheProgram();
+            mBitmapShader.setUniforms(mOrientationM, mBmpTextureId);
+            mBitmap.bindData(mBitmapShader);
+            mBitmap.draw();
+        }
+    }
+
     public void drawTransitionFrameContent(float x, float y, float r){
         //draw using previous program;
         //draw the region inside the circle
@@ -421,6 +500,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
 
     public void incrementShaderIndex(){
         shaderIndex=(shaderIndex+1)%6;
+        Log.d(TAG, "shader index : "+shaderIndex);
     }
 
     public void updateRadius(float r){
@@ -428,8 +508,12 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     }
 
     public void updateTouchCoordinates(float x, float y){
-        mX = x/camera_width;
-        mY = x/camera_height;
+        mY = x/camera_width;
+        mX = x/camera_height;
+    }
+
+    public void setTransitionState(int i){
+        mFilterTransitionState = i;
     }
 
 }

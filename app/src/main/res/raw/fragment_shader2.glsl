@@ -12,54 +12,39 @@ uniform int filSec;
 uniform float mX;
 uniform float mY;
 
+#define steps 2.
+
+void render(){
+    vec2 uv = vTextureCoord;
+
+    vec4 c = texture2D(sTexture,uv);
+    float g = max(c.r,max(c.g,c.b))*steps;
+    float fuck = 345.678+10.0;
+    float f = mod((uv.x+uv.y+500.)*sin(param2),1.);
+    if(mod(g,1.0)>f)
+        c.r = ceil(g);
+    else
+        c.r = floor(g);
+    c.r/=steps;
+
+    gl_FragColor = vec4(c.r, c.r, c.r, c.a);
+    //gl_FragColor = c;
+}
 
 void main() {
     float one = pow(vTextureCoord.x-mX, 2.0);
     float two = pow(vTextureCoord.y-mY, 2.0);
     float three = pow(filRad, 2.0);
-    vec2 uv = vTextureCoord;
-
     if(filSec==1){
         if(one+two<three){
-            float amount = 0.0;
-
-            amount = (1.0 + sin(param2*6.0)) * 0.5;
-            amount *= 1.0 + sin(param2*16.0) * 0.5;
-            amount *= 1.0 + sin(param2*19.0) * 0.5;
-            amount *= 1.0 + sin(param2*27.0) * 0.5;
-            amount = pow(amount, 3.0);
-
-            amount *= 0.05;
-
-            vec3 col;
-
-            col.r = texture2D( sTexture, vec2(uv.x+amount,uv.y) ).r;
-            col.g = texture2D( sTexture, uv ).g;
-            col.b = texture2D( sTexture, vec2(uv.x-amount,uv.y) ).b;
-
-            col *= (1.0 - amount * 0.5);
-            gl_FragColor = vec4(col, 1.0f);
+            render();
         }
     }else{
         if(one+two>three){
-            float amount = 0.0;
-
-            amount = (1.0 + sin(param2*6.0)) * 0.5;
-            amount *= 1.0 + sin(param2*16.0) * 0.5;
-            amount *= 1.0 + sin(param2*19.0) * 0.5;
-            amount *= 1.0 + sin(param2*27.0) * 0.5;
-            amount = pow(amount, 3.0);
-
-            amount *= 0.05;
-
-            vec3 col;
-
-            col.r = texture2D( sTexture, vec2(uv.x+amount,uv.y) ).r;
-            col.g = texture2D( sTexture, uv ).g;
-            col.b = texture2D( sTexture, vec2(uv.x-amount,uv.y) ).b;
-
-            col *= (1.0 - amount * 0.5);
-            gl_FragColor = vec4(col, 1.0f);
+            render();
         }
     }
 }
+
+
+

@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myGLSurfaceView.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                //myGLSurfaceView.incrementShaderIndex();
                 if(motionEvent.getAction()==MotionEvent.ACTION_UP){
                     mFilterTransition.start();
                     myGLSurfaceView.updateTouchCoordinates(motionEvent.getX(), motionEvent.getY());
@@ -249,7 +248,14 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     }
 
     public void updateRadius(float r){
-        Log.d(TAG, "radius value : "+r);
+        //Log.d(TAG, "radius value : "+r);
         myGLSurfaceView.updateRadius(r);
+    }
+
+    public void setTransitionState(int i){
+        myGLSurfaceView.setTransitionState(i);
+        if(i==0){
+            myGLSurfaceView.incrementShaderIndex();
+        }
     }
 }
