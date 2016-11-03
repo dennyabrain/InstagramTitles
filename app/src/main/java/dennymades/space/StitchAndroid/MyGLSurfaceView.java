@@ -62,7 +62,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     //private final FBORenderTarget mRenderTarget = new FBORenderTarget();
     private final OESTexture mCameraTexture = new OESTexture();
     public static Shader[] mOffscreenShader;
-    private int shaderIndex = 5;
+    private int shaderIndex = 0;
     private int mWidth, mHeight;
     private boolean updateTexture = false;
 
@@ -103,7 +103,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     long globalStartTime;
     private Calendar calendar;
 
-    private float filterRadius=1.0f;
+    private float filterRadius=2.0f;
     private int filterRadiusLocation;
     private int filterSection;
     private int mFilterTransitionState=0; //0 : not transitioning; 1 : mid transition
@@ -447,9 +447,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //Log.d(TAG, "seconds : "+param);
         GLES20.glUniform1f(paramLocation, param);
 
-        if(param2<4){
+        //Log.d(TAG, "param2 : "+param2);
+        if(param2<2){
             param2 = 0.0f;
         }
+        //Log.d(TAG, "param2 : "+param2);
         GLES20.glUniform1f(param2Location, param2);
 
         GLES20.glUniform1i(filterSection, direction);
@@ -508,8 +510,13 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     }
 
     public void updateTouchCoordinates(float x, float y){
-        mY = x/camera_width;
-        mX = x/camera_height;
+        //swap width and height
+        Log.d(TAG, "dimensions : "+x+","+y);
+        Log.d(TAG, "camera : "+camera_height+","+camera_width);
+
+        mY = (-1*x/camera_height)+1;
+        mX = y/camera_width;
+        Log.d(TAG, "mouse coordinates : "+mX+","+mY);
     }
 
     public void setTransitionState(int i){

@@ -14,6 +14,7 @@ uniform float mY;
 
 void render(){
     gl_FragColor = texture2D(sTexture, vTextureCoord);
+    //gl_FragColor = vec4(sin(param2), 0.5, 0.3, 1.0);
 }
 
 void main() {
