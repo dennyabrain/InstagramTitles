@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">vZine</string>
+    <string name="description1stLine">vZine is the coolest video filter app in town. \n \nCreate 10 second videos \nwith the dopest video filters for your Instagram Stories.</string>
+    <string name="description2ndLine">Upload the videos made with vZine using Instagram Stories.</string>
 </resources>

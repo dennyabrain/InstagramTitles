@@ -35,6 +35,7 @@ import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
 import util.Compatibility;
 import util.FileManager;
+import util.FullScreen;
 import util.Messages;
 import util.Permission;
 
@@ -124,13 +125,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         mFilterTransition = new FilterTransition(this, 10.0f);
 
         //make app full screen
-        getWindow().getDecorView().setSystemUiVisibility(
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        FullScreen.activateImmersiveMode(this);
     }
 
     @Override

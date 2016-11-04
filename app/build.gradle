@@ -26,4 +26,5 @@ dependencies {
     compile 'io.github.rockerhieu:emojicon:1.4.0'
     compile "com.android.support:support-core-utils:24.2.0"
     compile 'com.android.support:design:24.2.1'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
 }

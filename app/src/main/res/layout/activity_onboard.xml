@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/homescreen"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/decription1"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/colorYellow"
+        android:background="@color/colorAccent"
+        android:padding="20dp"
+        android:textSize="20dp"
+        android:text="@string/description1stLine"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/decription2"
+        android:layout_below="@+id/decription1"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorYellow"
+        android:background="@color/colorAccent"
+        android:padding="20dp"
+        android:textSize="20dp"
+        android:text="@string/description2ndLine"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lets Do This"
+        android:id="@+id/button"
+        android:onClick="btnOK"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="29dp" />
+
+
+</RelativeLayout>
