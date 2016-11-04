@@ -2,6 +2,7 @@ package dennymades.space.StitchAndroid;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -252,5 +253,16 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         if(i==0){
             myGLSurfaceView.incrementShaderIndex();
         }
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, OnboardActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slidefromleft, R.anim.slidetoright);
     }
 }

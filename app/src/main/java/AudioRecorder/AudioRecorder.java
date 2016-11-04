@@ -101,13 +101,15 @@ public class AudioRecorder {
                 }
                 //send amplitude to myGLSurfaceView
                 byte[] a = bytebuffer.array();
-                float sum = 0;
+                float maxAmp = 0;
                 for(int i=0;i<a.length;i++){
-                    sum+=a[i];
+                    if(Math.abs(a[i])>maxAmp){
+                        maxAmp = a[i];
+                    }
                 }
-                float avg = Math.abs(sum/a.length);
-                //Log.d(TAG, "avg : "+avg);
-                mCallback.sendMessage(Message.obtain(null, Messages.MSG_LOUDNESS, avg));
+                //float avg = Math.abs(sum/a.length);
+                //Log.d(TAG, "maxAmp : "+maxAmp);
+                mCallback.sendMessage(Message.obtain(null, Messages.MSG_LOUDNESS, maxAmp));
             }
         }
     }

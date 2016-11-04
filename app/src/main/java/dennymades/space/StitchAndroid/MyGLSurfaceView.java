@@ -387,7 +387,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         //Log.d(TAG, "seconds : "+param);
         GLES20.glUniform1f(paramLocation, param);
 
-        if(param2<4){
+        if(param2<100){
             param2 = 0.0f;
         }
         GLES20.glUniform1f(param2Location, param2);

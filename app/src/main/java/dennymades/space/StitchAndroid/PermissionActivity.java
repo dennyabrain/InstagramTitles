@@ -24,9 +24,9 @@ public class PermissionActivity extends AppCompatActivity {
         // seek permission for camera, external storage and audio recording
         boolean permissionGranted = Permission.checkPermission(this, permissions);
         if(permissionGranted){
-            Intent intent = new Intent(this, MainActivity.class);
+            /*Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-            overridePendingTransition(R.anim.slidefromright, R.anim.slidetoleft);
+            overridePendingTransition(R.anim.slidefromright, R.anim.slidetoleft);*/
         }else{
             Permission.seekPermission(this, permissions, Permission.PERMISSION_ALL);
         }

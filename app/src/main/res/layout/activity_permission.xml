@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/homescreen"
+        android:background="@drawable/homescreen"
         />
 
     <TextView
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/permission"
         android:layout_marginTop="40dp"
+        android:layout_margin="20dp"
         android:textColor="@color/colorYellow"
         android:background="@color/colorAccent"
         android:gravity="center"

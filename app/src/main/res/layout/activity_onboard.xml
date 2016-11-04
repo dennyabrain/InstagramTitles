@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/root">
 
     <pl.droidsonroids.gif.GifImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/homescreen"
-        />
+        android:background="@drawable/homescreen"
+        android:longClickable="false" />
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/decription1"
-        android:layout_marginTop="40dp"
-        android:textColor="@color/colorYellow"
-        android:background="@color/colorAccent"
-        android:padding="20dp"
-        android:textSize="20dp"
-        android:text="@string/description1stLine"/>
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/decription2"
-        android:layout_below="@+id/decription1"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/colorYellow"
-        android:background="@color/colorAccent"
-        android:padding="20dp"
-        android:textSize="20dp"
-        android:text="@string/description2ndLine"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/decription1"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimary"
+            android:textSize="20dp"
+            android:padding="20dp"
+            android:layout_margin="20dp"
+            android:text="@string/description1stLine"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/decription2"
+            android:layout_below="@+id/decription1"
+            android:layout_marginTop="40dp"
+            android:layout_margin="20dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimary"
+            android:padding="20dp"
+            android:textSize="20dp"
+            android:text="@string/description2ndLine"/>
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -40,7 +52,11 @@
         android:onClick="btnOK"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="29dp" />
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorWhite"
+        android:padding="20dp"
+        android:elevation="5dp"
+        android:layout_marginBottom="60dp" />
 
 
 </RelativeLayout>
