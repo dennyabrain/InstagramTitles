@@ -327,7 +327,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     public void stopRecording(){
         Log.d(TAG, "in stopRecording func");
         mVideoEncoder.stopRecording();
-        mAudioRecordHandlerThread.stopRecording();
+        //mAudioRecordHandlerThread.stopRecording();
     }
 
     public void startRecording(){

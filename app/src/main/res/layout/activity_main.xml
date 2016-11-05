@@ -83,34 +83,36 @@
         android:progress="0"
         android:elevation="9dp" />
 
-    <Button
+    <ImageButton
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="T"
+        android:src="@drawable/text"
+        android:background="@android:color/transparent"
         android:tag="TEXT"
         android:layout_marginRight="23dp"
         android:layout_marginTop="40dp"
         android:textColor="@color/transparentAccent"
-        android:background="@android:color/transparent"
-        android:textSize="20dp"
         android:onClick="btnText"
         android:id="@+id/btnText"
         android:layout_gravity="right|top" />
 
-    <Button
+    <ImageButton
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FLIP"
-        android:layout_marginRight="23dp"
-        android:layout_marginTop="80dp"
-        android:textColor="@color/transparentAccent"
+        android:src="@drawable/swap"
         android:background="@android:color/transparent"
+        android:layout_marginRight="23dp"
+        android:layout_marginTop="100dp"
+        android:textColor="@color/transparentAccent"
         android:textSize="20dp"
         android:onClick="btnFlip"
         android:id="@+id/btnFlip"
         android:layout_gravity="right|top" />
+
+
+
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="wrap_content"
@@ -119,4 +121,5 @@
         android:background="@drawable/homescreen"
         android:id="@+id/mainactivity_cover"
         android:longClickable="false" />
+
 </FrameLayout>

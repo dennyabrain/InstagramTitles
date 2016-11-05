@@ -25,6 +25,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import java.io.IOException;
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     private EmojiconEditText mEmojiconEditText;
     //private EmojiconTextView mEmojiconTextView;
     private MyEmojiTextView myEmojiTextView;
-    private Button btnText;
+    private ImageButton btnText;
 
     public static Bitmap mEmojiTextBitmap;
     FloatingActionButton fab;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myEmojiTextView.setResourceById((EmojiconTextView) findViewById(R.id.emojiconTextView));
         myEmojiTextView.setTouchEvents();
         myEmojiTextView.setDragEvents();
-        btnText = (Button) findViewById(R.id.btnText);
+        btnText = (ImageButton) findViewById(R.id.btnText);
         myEmojiTextView.loadTypefaces();
         fab = (FloatingActionButton)findViewById(R.id.fabRecord);
 

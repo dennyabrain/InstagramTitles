@@ -74,6 +74,11 @@ public class AudioRecorder {
         isEncoding = true;
     }
 
+    public void stopEncoding(){
+        audioEncoder.stop();
+        isEncoding=false;
+    }
+
     public void record(){
         final ByteBuffer bytebuffer = ByteBuffer.allocateDirect(SAMPLES_PER_FRAME);
         int bufferReadResult;

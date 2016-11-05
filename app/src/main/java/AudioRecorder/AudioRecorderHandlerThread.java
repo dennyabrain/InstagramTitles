@@ -91,6 +91,9 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
         audioRecorder.startEncoding();
     }
 
+    public void stopEncoding(){ audioRecorder.stopEncoding();
+    }
+
     public void setMuxer(MediaMuxer mxr){
         mediaMuxerWrapper = new MediaMuxerWrapper(mxr);
         audioEncoder = new AudioEncoder(mediaMuxerWrapper);
