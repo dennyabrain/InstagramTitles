@@ -18,9 +18,7 @@ package Encoder;
 
 import android.graphics.SurfaceTexture;
 import android.media.MediaMuxer;
-import android.media.MediaRecorder;
 import android.opengl.EGLContext;
-import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,7 +30,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import dennymades.space.StitchAndroid.MyGLSurfaceView;
-import util.TriangleHelper;
 
 /**
  * Encode a movie from frames rendered from an external texture image.
@@ -87,7 +84,6 @@ public class TextureMovieEncoder implements Runnable {
     private boolean mReady;
     private boolean mRunning;
 
-    private TriangleHelper mTriangle;
 
     private MyGLSurfaceView glSurfaceView;
 
@@ -429,10 +425,6 @@ public class TextureMovieEncoder implements Runnable {
         GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
-    }
-
-    public void setTriangle(TriangleHelper triangle){
-        mTriangle = triangle;
     }
 
     public void setMuxer(MediaMuxer mxr){

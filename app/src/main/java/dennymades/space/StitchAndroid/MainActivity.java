@@ -45,9 +45,11 @@ import util.Permission;
 
 public class MainActivity extends AppCompatActivity implements TextControlFragment.onTextFragmentButtonClickedListener, Handler.Callback {
     private static String TAG = "Main Activity : ";
-    private String[] permissions = {Manifest.permission.CAMERA,
+    public static String[] permissions = {Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO};
+
+    public static CameraDwi camera;
 
     //private MyGLSurfaceView mRenderer;
     private EmojiconEditText mEmojiconEditText;
@@ -76,10 +78,13 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
 
     private Handler mainActivityHandler;
 
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = this;
 
         // seek permission for camera, external storage and audio recording
         boolean permissionGranted = Permission.checkPermission(this, permissions);
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         }
 
         setContentView(R.layout.activity_main);
+        camera = new CameraDwi();
 
         mainActivityHandler = new Handler(this);
 
@@ -153,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             audioRecorderHandlerThread.quit();
         else
             audioRecorderHandlerThread.quitSafely();
+        camera.stopBackgroundThread();
         super.onStop();
     }
 
@@ -165,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         myGLSurfaceView.setAudioRecorderHandler(audioRecorderHandlerThread);
         myGLSurfaceView.setCallback(mainActivityHandler);
         stitchMediator.resumeEncoding();
+        camera.startBackgroundThread();
     }
 
 
@@ -187,7 +195,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     }
 
     public void btnText(View v){
-        String label=btnText.getText().toString();
+        //String label=btnText.getText().toString();
+        String label = btnText.getTag().toString();
 
         if(label.equals("TEXT")){
             //myEmojiTextView.getTextView().setVisibility(View.INVISIBLE);
@@ -195,7 +204,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             mEmojiconEditText.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(mEmojiconEditText, InputMethodManager.SHOW_IMPLICIT);
-            btnText.setText("DONE");
+            //btnText.setText("DONE");
+            btnText.setTag("DONE");
         }
         else if(label.equals("DONE")){
             mEmojiconEditText.setCursorVisible(false);
@@ -203,7 +213,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(mEmojiconEditText.getWindowToken(), 0);
             //mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
-            btnText.setText("TEXT");
+            //btnText.setText("TEXT");
+            btnText.setTag("TEXT");
             mEmojiconEditText.setVisibility(View.INVISIBLE);
             myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
             myEmojiTextView.getTextView().setText(mEmojiconEditText.getText().toString());
@@ -213,6 +224,10 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     public void btnSurface(View v){
         //myGLSurfaceView.incrementShaderIndex();
         //mFilterTransition.start();
+    }
+
+    public void btnFlip(View v){
+        camera.swapCamera();
     }
 
     @Override

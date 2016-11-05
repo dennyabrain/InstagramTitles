@@ -5,10 +5,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.media.MediaMuxer;
 import android.opengl.EGL14;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
@@ -18,14 +16,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.hardware.Camera.Size;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -37,7 +32,6 @@ import BitmapOverlay.BitmapTextureShader;
 import Encoder.TextureMovieEncoder;
 import util.FileManager;
 import util.Messages;
-import util.TriangleHelper;
 
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glEnable;
@@ -84,7 +78,6 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
     int camera_height;
 
     //Overlay Stuff
-    private TriangleHelper th;
 
     //Bitmap Overlay
     public static BitmapData mBitmap;
@@ -155,7 +148,6 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         globalStartTime = System.nanoTime();
         mMainActivityCallback.sendMessage(Message.obtain(null, Messages.REQUEST_MUXER));
         Log.d("Denny", "SurfaceCreated");
-        th = new TriangleHelper();
         mOffscreenShader = new Shader[6];
         try {
             mOffscreenShader[0] = new Shader();
@@ -176,7 +168,18 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
 
         GLES20.glClearColor(0.14f, 0.8f, 1.0f, 1.0f);
-        mVideoEncoder.setTriangle(th);
+
+        //generate camera texture------------------------
+        mCameraTexture.init();
+
+        //set up surfacetexture------------------
+        mTextureId=mCameraTexture.getTextureId();
+        mSurfaceTexture = new SurfaceTexture(mTextureId);
+        mSurfaceTexture.setOnFrameAvailableListener(this);
+
+        MainActivity.camera.setSurfaceTexture(mSurfaceTexture);
+        MainActivity.camera.open();
+
         mBitmap = new BitmapData();
         try {
             mBitmapShader = new BitmapTextureShader(mContext);
@@ -193,34 +196,26 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         mWidth = width;
         mHeight= height;
 
-        //generate camera texture------------------------
-        mCameraTexture.init();
-
-        //set up surfacetexture------------------
-        mTextureId=mCameraTexture.getTextureId();
-        mSurfaceTexture = new SurfaceTexture(mTextureId);
-        mSurfaceTexture.setOnFrameAvailableListener(this);
-
 
         //set camera para-----------------------------------
         camera_width =0;
         camera_height =0;
 
-        if(mCamera != null){
+        /*if(mCamera != null){
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
-        }
+        }*/
 
-        mCamera = Camera.open(0);
-        try{
+        //mCamera = Camera.open(0);
+        /*try{
             mCamera.stopPreview();
             mCamera.setPreviewTexture(mSurfaceTexture);
         }catch(IOException ioe){
             Log.d(TAG, "IO Exception in setting preview texture", ioe);
-        }
+        }*/
 
-        Camera.Parameters param = mCamera.getParameters();
+        /*Camera.Parameters param = mCamera.getParameters();
         List<Size> psize = param.getSupportedPreviewSizes();
         if(psize.size() > 0 ){
             int i;
@@ -235,7 +230,10 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             camera_width = psize.get(i).width;
             camera_height= psize.get(i).height;
 
-        }
+        }*/
+
+        camera_width =MainActivity.camera.getDimension().getWidth();
+        camera_height =MainActivity.camera.getDimension().getHeight();
 
         //get the camera orientation and display dimension------------
         if(mContext.getResources().getConfiguration().orientation ==
@@ -251,10 +249,10 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         }
 
         //start camera-----------------------------------------
-        mCamera.setParameters(param);
+        /*mCamera.setParameters(param);
         //TODO replace with better camera orientation detection method.
         mCamera.setDisplayOrientation(90);
-        mCamera.startPreview();
+        mCamera.startPreview();*/
 
         //start render---------------------
         requestRender();

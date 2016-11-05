@@ -87,7 +87,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TEXT"
+        android:text="T"
+        android:tag="TEXT"
         android:layout_marginRight="23dp"
         android:layout_marginTop="40dp"
         android:textColor="@color/transparentAccent"
@@ -95,6 +96,20 @@
         android:textSize="20dp"
         android:onClick="btnText"
         android:id="@+id/btnText"
+        android:layout_gravity="right|top" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FLIP"
+        android:layout_marginRight="23dp"
+        android:layout_marginTop="80dp"
+        android:textColor="@color/transparentAccent"
+        android:background="@android:color/transparent"
+        android:textSize="20dp"
+        android:onClick="btnFlip"
+        android:id="@+id/btnFlip"
         android:layout_gravity="right|top" />
 
     <pl.droidsonroids.gif.GifImageView
