@@ -17,7 +17,7 @@ public class FileManager {
     private static String TAG = "FileManager : ";
 
     public static File getOutputMediaFile(int mediaType){
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Stitch");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
 
         if(!mediaStorageDir.exists()){
             if(!mediaStorageDir.mkdirs()){

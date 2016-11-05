@@ -69,6 +69,8 @@ public class AudioRecorder {
     }
 
     public void startEncoding(){
+
+        audioEncoder.start();
         isEncoding = true;
     }
 
@@ -97,6 +99,7 @@ public class AudioRecorder {
                 bytebuffer.flip();
 
                 if(isEncoding){
+                    Log.d(TAG, "audio encoding");
                     audioEncoder.encode(bytebuffer, bufferReadResult, audioEncoder.getPTSUs());
                 }
                 //send amplitude to myGLSurfaceView

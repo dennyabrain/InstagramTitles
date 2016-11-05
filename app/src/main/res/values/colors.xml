@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#7974AD</color>
     <color name="colorAccent">#FF3333</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#111111</color>
     <color name="colorYellow">#D80C63</color>
     <color name="transparentAccent">#aaFC1D24</color>
 </resources>

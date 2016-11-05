@@ -15,4 +15,6 @@ public class Messages {
     public static final int REQUEST_MUXER = 400;
 
     public static final int MSG_LOUDNESS = 500;
+
+    public static final int FADE_OUT_GIF = 600;
 }

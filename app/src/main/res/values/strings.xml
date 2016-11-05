@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">vZine</string>
-    <string name="description1stLine">Create 10 second videos with effects that react to sound. \n \nTouch on screen to cycle through filters.</string>
+    <string name="description1stLine">Create 10 second videos with filters that react to sound. \n \nTouch on screen to cycle through filters.</string>
     <string name="description2ndLine">A great way to spice up your Instagram Stories.</string>
 </resources>

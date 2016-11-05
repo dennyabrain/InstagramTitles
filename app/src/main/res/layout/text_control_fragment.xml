@@ -2,73 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragmentRootView">
-    <!--
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    android:id="@+id/fragmentRootView"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Bold"
-                android:layout_weight="1"
-                android:id="@+id/button3" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Underline"
-                android:layout_weight="1"
-                android:id="@+id/button4"
-                android:layout_gravity="center_horizontal" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Italic"
-                android:layout_weight="1"
-                android:id="@+id/button5"
-                android:layout_gravity="right" />
-
-        </LinearLayout>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Left"
-                android:layout_weight="1"
-                android:id="@+id/button6" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Center"
-                android:id="@+id/button7"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal" />
-
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Right"
-                android:layout_weight="1"
-                android:id="@+id/button8"
-                android:layout_gravity="right" />
-
-        </LinearLayout>
-    -->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

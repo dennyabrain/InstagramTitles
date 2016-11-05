@@ -62,7 +62,7 @@ public class AudioRecorderHandlerThread extends HandlerThread implements Handler
                 Log.d(TAG,  "recording start message received");
                 //mCallback.sendMessage(Message.obtain(null, Messages.MSG_AUDIO_RECORDING_START_CALLBACK));
                 audioRecorder.start();
-                audioEncoder.start();
+                //audioEncoder.start();
                 audioRecorder.record();
                 break;
             case MSG_RECORDING_STOP:

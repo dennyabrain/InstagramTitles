@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:id="@+id/rootLayout"
     android:clipChildren="false"
+    android:clipToPadding="false"
     emojicon:elevation="12dp" >
+
+
     <dennymades.space.StitchAndroid.MyGLSurfaceView
         android:id="@+id/renderer_view"
         android:layout_width="match_parent"
@@ -22,7 +25,7 @@
         android:textColor="@color/colorYellow"
         android:textSize="50dp"
         android:background="@android:color/transparent"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:layout_gravity="center"
@@ -49,6 +52,7 @@
         android:orientation="vertical"
         android:layout_gravity="bottom"
         android:clipChildren="false"
+        android:clipToPadding="false"
         />
 
 
@@ -61,8 +65,11 @@
         android:layout_marginRight="20dp"
         android:onClick="fabRecordClick"
         android:layout_marginBottom="80dp"
+        android:padding="40dp"
         app:borderWidth="0dp"
-        emojicon:elevation="10dp" />
+        emojicon:elevation="10dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
@@ -82,6 +89,7 @@
         android:layout_height="wrap_content"
         android:text="TEXT"
         android:layout_marginRight="23dp"
+        android:layout_marginTop="40dp"
         android:textColor="@color/transparentAccent"
         android:background="@android:color/transparent"
         android:textSize="20dp"
@@ -89,4 +97,11 @@
         android:id="@+id/btnText"
         android:layout_gravity="right|top" />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/homescreen"
+        android:background="@drawable/homescreen"
+        android:id="@+id/mainactivity_cover"
+        android:longClickable="false" />
 </FrameLayout>

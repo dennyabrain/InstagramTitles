@@ -175,7 +175,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             e.printStackTrace();
         }
 
-        GLES20.glClearColor(0.96f, 0.94f, 0.32f, 1.0f);
+        GLES20.glClearColor(0.14f, 0.8f, 1.0f, 1.0f);
         mVideoEncoder.setTriangle(th);
         mBitmap = new BitmapData();
         try {
@@ -183,6 +183,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
         } catch (Exception e) {
             Log.d(TAG, "exception creating bitmap texture : ", e);
         }
+        mMainActivityCallback.sendMessage(Message.obtain(null, Messages.FADE_OUT_GIF));
     }
 
     @SuppressLint("NewApi")
@@ -295,7 +296,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Rend
             drawFrameContent((shaderIndex+1)%6, 1);
             drawFrameContent(shaderIndex, -1);
         }else if(mFilterTransitionState==0){
-            filterRadius=1;
+            filterRadius=2;
             drawFrameContent(shaderIndex, 1);
         }
 

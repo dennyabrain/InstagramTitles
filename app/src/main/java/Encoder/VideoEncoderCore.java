@@ -168,9 +168,9 @@ public class VideoEncoderCore {
 
                 // now that we have the Magic Goodies, start the muxer
                 mTrackIndex = mMuxer.addTrack(newFormat);
-                //Added by Denny
 
                 mMuxer.start();
+                Log.d(TAG, "muxer started");
                 mMuxerStarted = true;
             } else if (encoderStatus < 0) {
                 Log.w(TAG, "unexpected result from encoder.dequeueOutputBuffer: " +

@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
@@ -34,6 +36,7 @@ import Encoder.VideoEncoderCore;
 import Mediator.StitchMediator;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
+import pl.droidsonroids.gif.GifImageView;
 import util.Compatibility;
 import util.FileManager;
 import util.FullScreen;
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
     private MyGLSurfaceView myGLSurfaceView;
 
     private FilterTransition mFilterTransition;
+
+    private GifImageView gifImageView;
 
     //FAB Logic
     //boolean isFabOpen=false;
@@ -117,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         btnText = (Button) findViewById(R.id.btnText);
         myEmojiTextView.loadTypefaces();
         fab = (FloatingActionButton)findViewById(R.id.fabRecord);
+
+        gifImageView =(GifImageView)findViewById(R.id.mainactivity_cover);
         //myEmojiTextView.getTextView().setText("Testing \n In \n New York");
         //myEmojiTextView.getTextView().setVisibility(View.VISIBLE);
 
@@ -192,6 +199,9 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
         }
         else if(label.equals("DONE")){
             mEmojiconEditText.setCursorVisible(false);
+            FullScreen.activateImmersiveMode(this);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEmojiconEditText.getWindowToken(), 0);
             //mEmojiTextBitmap = Bitmap.createBitmap(mEmojiconEditText.getDrawingCache());
             btnText.setText("TEXT");
             mEmojiconEditText.setVisibility(View.INVISIBLE);
@@ -238,6 +248,21 @@ public class MainActivity extends AppCompatActivity implements TextControlFragme
             case Messages.MSG_LOUDNESS:
                 //Log.d(TAG, "LOUDNESS RECEIVED : "+message.obj);
                 myGLSurfaceView.setParam((float)(message.obj));
+                break;
+            case Messages.FADE_OUT_GIF:
+                //gifImageView.setVisibility(View.INVISIBLE);
+                AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+                anim.setDuration(500);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        gifImageView.setVisibility(View.GONE);
+                    }
+                    public void onAnimationRepeat(Animation animation) {}
+                    public void onAnimationStart(Animation animation) {}
+                });
+                gifImageView.startAnimation(anim);
+                //start fade out transition
                 break;
         }
         return true;
